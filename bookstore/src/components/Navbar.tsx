@@ -55,7 +55,7 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group">
           <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl overflow-hidden bg-slate-50 border border-slate-200 p-0.5 sm:p-1 group-hover:scale-105 transition-transform duration-300 shadow-xs flex-shrink-0">
             <img
-              src="/logo.png"
+              src="/model-1/logo.png"
               alt="The Abbie Store Logo"
               className="w-full h-full object-contain"
             />
