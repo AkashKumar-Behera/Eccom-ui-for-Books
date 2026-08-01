@@ -15,17 +15,20 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
   const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
+
+  // Sync selectedImage when product changes
+  React.useEffect(() => {
+    if (product) {
+      setSelectedImage(product.image);
+    }
+  }, [product]);
 
   if (!product) return null;
 
   const isWishlisted = isInWishlist(product.id);
   const imageList = product.images && product.images.length > 0 ? product.images : [product.image];
-  const [selectedImage, setSelectedImage] = useState<string>(product.image);
-
-  // Sync selectedImage when product changes
-  React.useEffect(() => {
-    setSelectedImage(product.image);
-  }, [product]);
+  const currentImage = selectedImage || product.image;
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -69,7 +72,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
           {/* Main Selected Image */}
           <div className="w-full flex-1 flex items-center justify-center min-h-[260px]">
             <img
-              src={selectedImage}
+              src={currentImage}
               alt={product.name}
               className="w-full max-h-72 object-contain transition-all duration-300 rounded-xl"
             />
