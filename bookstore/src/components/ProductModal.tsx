@@ -19,6 +19,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
   if (!product) return null;
 
   const isWishlisted = isInWishlist(product.id);
+  const imageList = product.images && product.images.length > 0 ? product.images : [product.image];
+  const [selectedImage, setSelectedImage] = useState<string>(product.image);
+
+  // Sync selectedImage when product changes
+  React.useEffect(() => {
+    setSelectedImage(product.image);
+  }, [product]);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -51,18 +58,41 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
           <X className="w-5 h-5" />
         </button>
 
-        {/* Left: Image Container */}
-        <div className="relative bg-slate-50 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-100">
+        {/* Left: Image Container with Swap Thumbnails */}
+        <div className="relative bg-slate-50 p-6 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-slate-100">
           {product.badge && (
             <span className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0284c7] text-white">
               {product.badge}
             </span>
           )}
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full max-h-72 object-contain"
-          />
+
+          {/* Main Selected Image */}
+          <div className="w-full flex-1 flex items-center justify-center min-h-[260px]">
+            <img
+              src={selectedImage}
+              alt={product.name}
+              className="w-full max-h-72 object-contain transition-all duration-300 rounded-xl"
+            />
+          </div>
+
+          {/* Thumbnail Image Swapper Row */}
+          {imageList.length > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-4 pt-3 border-t border-slate-200/60 w-full overflow-x-auto">
+              {imageList.map((imgUrl, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImage(imgUrl)}
+                  className={`w-12 h-12 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all duration-200 ${
+                    selectedImage === imgUrl
+                      ? 'border-[#0284c7] scale-105 shadow-sm'
+                      : 'border-transparent opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Right: Details */}
