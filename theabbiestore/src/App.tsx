@@ -190,10 +190,10 @@ export function App() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { title: 'POV: Customized Business Kit', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400', tag: 'Reel 499/-' },
-              { title: 'Delulu Jewels Order Book', img: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&q=80&w=400', tag: '50k+ Views' },
-              { title: '50 Name Labels @ 149', img: 'https://images.unsplash.com/photo-1607344645866-009c320b5ab8?auto=format&fit=crop&q=80&w=400', tag: 'Bestseller' },
-              { title: 'Harry Potter Magical Journal', img: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400', tag: 'Trending' }
+              { title: 'Pastel Ribbon & Heart Journal', img: PRODUCTS_DATA[0]?.image || '', tag: 'Vol. 1' },
+              { title: 'Aesthetic Daily Focus Planner', img: PRODUCTS_DATA[1]?.image || '', tag: 'Vol. 2' },
+              { title: 'Kawaii Pastel Gel Pen Set', img: PRODUCTS_DATA[2]?.image || '', tag: 'Vol. 3' },
+              { title: 'Gold Heart Wire Clip Organizers', img: PRODUCTS_DATA[3]?.image || '', tag: 'Vol. 4' }
             ].map((feed, i) => (
               <a 
                 key={i} 

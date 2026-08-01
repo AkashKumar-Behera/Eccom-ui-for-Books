@@ -113,5 +113,78 @@ export const PRODUCTS_DATA: Product[] = [
     description: 'Cute heart-shaped brass binder clips and ribbon page markers.',
     features: ['Rust-Proof Plated Steel', 'Heart & Bow Shapes'],
     inStock: true
+  },
+  {
+    id: 'insta-prod-5',
+    name: 'Pastel Gradient Washi Tape Collection (Vol. 5)',
+    category: 'stickers',
+    price: 199,
+    originalPrice: 299,
+    rating: 4.9,
+    reviewsCount: 180,
+    image: 'https://instagram.fbom19-3.fna.fbcdn.net/v/t51.82787-15/629333268_17862215673590810_4215760498870532126_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=101&_nc_map=urlgen_bucketless&ig_cache_key=MzgyNTc0MjE5ODY3OTg3ODIxMQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=49JapxO9XF8Q7kNvwH-Cfsq&_nc_oc=Adqxp9x_LRnnZvKUquH-t0Fqcc4690U3WO8ccwqJQJdHaSaJexA7a86PrA8mGVTKCYE&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-3.fna&_nc_gid=As5ANraRs4u1YhJwUBUUFw&_nc_ss=7a22e&oh=00_AQGXF5igOEhkmDckzR7UypGkfYZqfwJKflSwZml1i_u8vg&oe=6A73EEEA',
+    secondaryImages: [
+      'https://instagram.fbom19-4.fna.fbcdn.net/v/t51.82787-15/627701556_17862215685590810_3452252331768764365_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=107&_nc_map=urlgen_bucketless&ig_cache_key=MzgyNTc0MjIwNTQwNzU4NDIxOA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=KqBCFXOu-O4Q7kNvwFJK00I&_nc_oc=Adpc4IwST_bGS8e2zRBWMdhvqMyY2Pvj2Bm3BugaGwpUM5S8kOGwfRdmHX5WqueOVhk&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-4.fna&_nc_gid=As5ANraRs4u1YhJwUBUUFw&_nc_ss=7a22e&oh=00_AQGBtxtusBgcFhvC0Do7H-3fjSZZ7CD8ZCPcuGZU0Hh6RA&oe=6A73BAFF'
+    ],
+    badge: 'NEW ARRIVAL',
+    isCustomizable: false,
+    description: 'Pastel gradient washi tape set for journal decoration.',
+    features: ['10 Rolls Set', 'Silver Foil Accents'],
+    inStock: true
+  },
+  {
+    id: 'insta-prod-6',
+    name: 'Cute Ribbon Charm Bookmark Set (Vol. 6)',
+    category: 'order-books',
+    price: 149,
+    originalPrice: 199,
+    rating: 4.9,
+    reviewsCount: 195,
+    image: 'https://instagram.fbom19-4.fna.fbcdn.net/v/t51.82787-15/627676752_17862214524590810_8097599719746722188_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=105&_nc_map=urlgen_bucketless&ig_cache_key=MzgyNTczNDgyNTc3Mjk0Mjg3MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=Dr8hoCdjqPwQ7kNvwE6_hv5&_nc_oc=Adr7iG8fFCukkCqZWhiDy7Br6HnWpt6Qcp-GvmSjgd_8RlGffGeRnb2nI2IHrc4W36Y&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-4.fna&_nc_gid=sh86o12omwXbV6D-xb71PA&_nc_ss=7a22e&oh=00_AQGfHD13E2xjAO8j6WTztIIqPKJVv99IXA6vjvO188frWA&oe=6A73CB76',
+    secondaryImages: [
+      'https://instagram.fbom19-1.fna.fbcdn.net/v/t51.82787-15/625369481_17862214533590810_6206031122351772976_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=107&_nc_map=urlgen_bucketless&ig_cache_key=MzgyNTczNDgzMzkxODI2OTE5MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=kIVdQm_fynIQ7kNvwGPu0M8&_nc_oc=AdrnrF8NT6TZ03Ai9cc2Wv4f2pSVqm45RNdfyOQChlrD9EaTgAMAE2v--IhY4X8S_2A&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-1.fna&_nc_gid=sh86o12omwXbV6D-xb71PA&_nc_ss=7a22e&oh=00_AQF-D7x75xYh2E9R8obO_oZ0job-pblphvxHJ1_Y37oRew&oe=6A73E601'
+    ],
+    badge: 'POPULAR',
+    isCustomizable: false,
+    description: 'Ribbon bookmarks & clip set.',
+    features: ['Pastel Ribbons', 'Gold Plated Clip'],
+    inStock: true
+  },
+  {
+    id: 'insta-prod-7',
+    name: 'Soft Cover Bullet Journal (A5) (Vol. 7)',
+    category: 'journals',
+    price: 349,
+    originalPrice: 449,
+    rating: 4.9,
+    reviewsCount: 210,
+    image: 'https://instagram.fbom19-1.fna.fbcdn.net/v/t51.82787-15/629237339_17862213075590810_7497381242081428804_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=105&_nc_map=urlgen_bucketless&ig_cache_key=MzgyNTcyNjA1OTc0NDcxMTMwMA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=mnNEdRRYkyAQ7kNvwFXOUtX&_nc_oc=AdqJ8pbexK7z69xek7APL8AFrHiiMbbkgFKsINONuXCOvvOdw-P9Y53c6po-glEhOdA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-1.fna&_nc_gid=jdo1pz1F-T7QKkmkVstXOA&_nc_ss=7a22e&oh=00_AQFjXGG25FNzy9FI0rg8dNwdk1vnIjfQqLI3N07t_944bA&oe=6A73D868',
+    secondaryImages: [
+      'https://instagram.fbom19-4.fna.fbcdn.net/v/t51.82787-15/625427886_17862213087590810_8524968320750957641_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=107&_nc_map=urlgen_bucketless&ig_cache_key=MzgyNTcyNjA2NzUyMDk1NTA1OQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=ge6g59LnPIEQ7kNvwFBd9QM&_nc_oc=AdrKcpNynRuCIO59tbevqOozCSQVwWmqW4_fL4vYeC9DBOqnhZqMU48bBF97l-1qjqI&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-4.fna&_nc_gid=jdo1pz1F-T7QKkmkVstXOA&_nc_ss=7a22e&oh=00_AQEkgQIttBJgS8ZDl6mc7zBobeRogkZx_Z3cQ2n6w4tglQ&oe=6A73D4D3'
+    ],
+    badge: 'BESTSELLER',
+    isCustomizable: true,
+    customizationLabel: 'Name on Cover',
+    description: 'A5 soft cover bullet journal.',
+    features: ['120 GSM Bleed Proof Paper', '200 Pages'],
+    inStock: true
+  },
+  {
+    id: 'insta-prod-8',
+    name: 'Pastel Mild Highlighters Pack (Vol. 8)',
+    category: 'labels',
+    price: 219,
+    originalPrice: 280,
+    rating: 4.9,
+    reviewsCount: 225,
+    image: 'https://instagram.fbom19-5.fna.fbcdn.net/v/t51.82787-15/610364221_17857655823590810_1958885204373479114_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=111&_nc_map=urlgen_bucketless&ig_cache_key=MzgwMjQwNjgwNjI4MzIxNjE1MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=Wj0ptUK1Ex0Q7kNvwEVrXs4&_nc_oc=Adps5Gt8k_eOE5-hK4YWZsbGBhKx6PeWC4Pu2MrpgBilBQU5fPwwpBX3iiTbrgJpvvU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-5.fna&_nc_gid=fkx8b_0c5qdHZzEgepI-qQ&_nc_ss=7a22e&oh=00_AQH5kxU5RVxMQih2knMJ5ek1dbBiGQGHBXP3VeyAKo572g&oe=6A73C004',
+    secondaryImages: [
+      'https://instagram.fbom19-1.fna.fbcdn.net/v/t51.82787-15/610489811_17857655832590810_6882085219682459981_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=107&_nc_map=urlgen_bucketless&ig_cache_key=MzgwMjQwNjgwNjMzMzUzMjYxNA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=wul9INBx9AoQ7kNvwGlGs5P&_nc_oc=Adq8sJka6X6ZCmmAQnZdvBv-mmbReho0DwxhgMx8eMXvZJP6icJ2SIgR_U_6vYVO55w&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fbom19-1.fna&_nc_gid=fkx8b_0c5qdHZzEgepI-qQ&_nc_ss=7a22e&oh=00_AQHoXNm_YENnB4FHk913a4_XCAL5kGymGB0jcqr4IsPzTw&oe=6A73C0E3'
+    ],
+    badge: 'POPULAR',
+    isCustomizable: false,
+    description: 'Pastel mild highlighters set.',
+    features: ['Dual Tip', 'Pastel Colors'],
+    inStock: true
   }
 ];
