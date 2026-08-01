@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Fredoka:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-cute: 'Fredoka', cursive;
+  
+  --sky-bg: #f0f7ff;
+  --sky-card: rgba(255, 255, 255, 0.92);
+  --sky-accent: #38bdf8;
+  --sky-deep: #0284c7;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--sky-bg);
+  color: #0f172a;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif-aesthetic {
+  font-family: var(--font-serif);
+}
+
+.font-cute-aesthetic {
+  font-family: var(--font-cute);
+}
+
+/* Custom Aesthetic Sky Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f7ff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #38bdf8;
+  border-radius: 9999px;
+  border: 2px solid #f0f7ff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(224, 242, 254, 0.8);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(186, 230, 253, 0.5);
+}
+
+/* Soft glowing shadow */
+.sky-shadow {
+  box-shadow: 0 10px 30px -5px rgba(56, 189, 248, 0.2);
+}
+
+.sky-shadow-hover {
+  transition: all 0.3s ease;
+}
+
+.sky-shadow-hover:hover {
+  box-shadow: 0 20px 35px -5px rgba(56, 189, 248, 0.3);
+  transform: translateY(-4px);
+}

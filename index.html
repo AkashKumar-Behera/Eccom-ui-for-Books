@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Showcase Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090d16;
+            --card-bg: rgba(22, 30, 46, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-primary: #6366f1;
+            --accent-secondary: #ec4899;
+            --accent-tertiary: #14b8a6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+        }
+
+        .header {
+            text-align: center;
+            max-width: 650px;
+            margin-bottom: 3.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+        }
+
+        .title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card-1::before { background: linear-gradient(90deg, #6366f1, #818cf8); }
+        .card-2::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
+        .card-3::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-1 .icon-wrapper { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+        .card-2 .icon-wrapper { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+        .card-3 .icon-wrapper { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            gap: 8px;
+            transition: gap 0.3s ease;
+        }
+
+        .card-1 .card-footer { color: #818cf8; }
+        .card-2 .card-footer { color: #f472b6; }
+        .card-3 .card-footer { color: #2dd4bf; }
+
+        .card:hover .card-footer {
+            gap: 12px;
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <span class="badge">Multi-App Portal</span>
+        <h1 class="title">Select Mockup UI</h1>
+        <p class="subtitle">Choose from the available frontend store designs below to explore the interactive mockups.</p>
+    </div>
+
+    <div class="grid">
+        <!-- Model 1: Bookstore -->
+        <a href="/model-1/" class="card card-1">
+            <div>
+                <div class="card-header">
+                    <div class="icon-wrapper">📚</div>
+                    <span class="tech-tag">NEXT.JS</span>
+                </div>
+                <h2 class="card-title">Model 1</h2>
+                <p class="card-desc">Bookstore Modern E-Commerce UI featuring smooth GSAP animations and catalog grid.</p>
+            </div>
+                <div class="card-footer">
+                <span>Launch UI</span>
+                <span class="arrow">→</span>
+            </div>
+        </a>
+
+        <!-- Model 2: TheAbbieStore -->
+        <a href="/model-2/" class="card card-2">
+            <div>
+                <div class="card-header">
+                    <div class="icon-wrapper">✨</div>
+                    <span class="tech-tag">VITE + REACT</span>
+                </div>
+                <h2 class="card-title">Model 2</h2>
+                <p class="card-desc">TheAbbieStore luxury aesthetic store concept with interactive showcase components.</p>
+            </div>
+            <div class="card-footer">
+                <span>Launch UI</span>
+                <span class="arrow">→</span>
+            </div>
+        </a>
+
+        <!-- Model 3: Store -->
+        <a href="/model-3/" class="card card-3">
+            <div>
+                <div class="card-header">
+                    <div class="icon-wrapper">🛍️</div>
+                    <span class="tech-tag">HTML / JS</span>
+                </div>
+                <h2 class="card-title">Model 3</h2>
+                <p class="card-desc">Store interactive HTML mockup with rich product preview and quick action modal.</p>
+            </div>
+            <div class="card-footer">
+                <span>Launch UI</span>
+                <span class="arrow">→</span>
+            </div>
+        </a>
+    </div>
+
+</body>
+</html>
