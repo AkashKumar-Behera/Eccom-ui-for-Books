@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
         <div className="md:col-span-2 space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-[#76B1BC]/30 p-1">
-              <img src="/logo.png" alt="The Abbie Store Logo" className="w-full h-full object-contain" />
+              <img src="/model-1/logo.png" alt="The Abbie Store Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-lg font-serif font-bold text-[#1A1C1C] tracking-tight">
               The Abbie <span className="text-[#2C4F54] text-xs font-sans font-bold">STORE</span>

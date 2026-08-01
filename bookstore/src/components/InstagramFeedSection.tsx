@@ -20,7 +20,7 @@ export const InstagramFeedSection: React.FC<InstagramFeedProps> = ({ products, o
           <div className="flex items-center gap-4 text-left">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 p-0.5 shadow-md flex-shrink-0">
               <div className="w-full h-full bg-white rounded-[14px] p-1 flex items-center justify-center">
-                <img src="/logo.png" alt="The Abbie Store Insta" className="w-full h-full object-contain" />
+                <img src="/model-1/logo.png" alt="The Abbie Store Insta" className="w-full h-full object-contain" />
               </div>
             </div>
             <div>
