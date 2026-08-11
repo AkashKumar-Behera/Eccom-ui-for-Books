@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import "../styles/light.css";
+import "../styles/dark.css";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const chewy = localFont({
   src: "../../Chewy/Chewy-Regular.ttf",
@@ -27,8 +31,6 @@ export const metadata: Metadata = {
   description: "Pinterest Inspired Daily Essentials",
 };
 
-import { AuthProvider } from "@/context/AuthContext";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -40,10 +42,11 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${chewy.variable} ${genty.variable} ${lobster.variable} ${moreSugar.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+      <body className="min-h-full flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-

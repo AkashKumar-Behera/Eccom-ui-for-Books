@@ -1,0 +1,37 @@
+.dark {
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-banner: #133435;
+  --bg-accent: #1e4d4e;
+  --text-banner: #98C4C5;
+  --text-brand: #98C4C5;
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --border-color: rgba(152, 196, 197, 0.2);
+  --card-bg: #18181b;
+  --card-shadow: rgba(0, 0, 0, 0.5);
+  --modal-bg: #18181b;
+  --btn-shop: #1e4d4e;
+  --btn-shop-text: #98C4C5;
+  --btn-shop-hover: #296668;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg-primary: #09090b;
+    --bg-secondary: #18181b;
+    --bg-banner: #133435;
+    --bg-accent: #1e4d4e;
+    --text-banner: #98C4C5;
+    --text-brand: #98C4C5;
+    --text-primary: #f4f4f5;
+    --text-secondary: #a1a1aa;
+    --border-color: rgba(152, 196, 197, 0.2);
+    --card-bg: #18181b;
+    --card-shadow: rgba(0, 0, 0, 0.5);
+    --modal-bg: #18181b;
+    --btn-shop: #1e4d4e;
+    --btn-shop-text: #98C4C5;
+    --btn-shop-hover: #296668;
+  }
+}

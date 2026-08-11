@@ -127,12 +127,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">
-      <div className="relative w-full max-w-md bg-white rounded-3xl p-5 sm:p-8 shadow-2xl border border-[#98C4C5]/30 animate-in fade-in zoom-in duration-200 my-auto">
+      <div className="relative w-full max-w-md bg-[var(--modal-bg)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-8 shadow-2xl border border-[var(--border-color)] animate-in fade-in zoom-in duration-200 my-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-700 transition-colors p-1"
+          className="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-1"
         >
           <X className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>

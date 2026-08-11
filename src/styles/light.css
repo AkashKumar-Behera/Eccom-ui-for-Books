@@ -1,0 +1,17 @@
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-banner: #98C4C5;
+  --bg-accent: #98C4C5;
+  --text-banner: #1E4B4C;
+  --text-brand: #1E4B4C;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --border-color: rgba(152, 196, 197, 0.3);
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.05);
+  --modal-bg: #ffffff;
+  --btn-shop: #98C4C5;
+  --btn-shop-text: #1E4B4C;
+  --btn-shop-hover: #7AB3B4;
+}

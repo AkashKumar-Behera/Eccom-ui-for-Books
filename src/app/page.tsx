@@ -150,15 +150,9 @@ export default function Home() {
         >
           {/* Fixed Drawer Header */}
           <div className="flex items-center justify-between p-6 pb-4 border-b border-[var(--border-color)] bg-[var(--card-bg)]">
-            <div className="flex items-center gap-3">
-              <span className="text-lg font-bold text-[var(--text-brand)] font-moresugar">
-                MENU
-              </span>
-              {/* Theme Toggle in Side Drawer (Visible only when width < 950px) */}
-              <div className="min-[950px]:hidden">
-                <ThemeToggle />
-              </div>
-            </div>
+            <span className="text-lg font-bold text-[var(--text-brand)] font-moresugar">
+              MENU
+            </span>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
               className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
@@ -265,6 +259,16 @@ export default function Home() {
               >
                 OUR DIARY
               </a>
+
+              {/* Dedicated Theme Switcher Section in Side Drawer */}
+              <div className="pt-4 border-t border-[var(--border-color)]">
+                <span className="text-xs font-extrabold text-[var(--text-brand)] uppercase tracking-wider block mb-3">
+                  THEME PREFERENCE
+                </span>
+                <div className="flex items-center gap-2">
+                  <ThemeToggle showLabels={true} />
+                </div>
+              </div>
             </div>
           </div>
 
