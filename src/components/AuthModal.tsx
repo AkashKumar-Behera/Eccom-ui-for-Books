@@ -32,6 +32,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   if (!isOpen) return null;
 
+  const getErrorMessage = (err: any) => {
+    if (!err) return "An error occurred";
+    if (err.code) {
+      if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+        return "Invalid email or password. Please check your credentials.";
+      }
+      if (err.code === "auth/email-already-in-use") {
+        return "An account with this email already exists.";
+      }
+      if (err.code === "auth/weak-password") {
+        return "Password should be at least 6 characters.";
+      }
+      if (err.code === "auth/unauthorized-domain") {
+        return "This domain is not authorized in Firebase Console settings.";
+      }
+      return `Firebase: ${err.code.replace("auth/", "").replace(/-/g, " ")}`;
+    }
+    return err.message || "Authentication failed";
+  };
+
   const handleGoogleSignIn = async () => {
     try {
       setError("");
@@ -39,7 +59,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       await signInWithGoogle();
       onClose();
     } catch (err: any) {
-      setError(err.message || "Failed to sign in with Google");
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -57,7 +77,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       }
       onClose();
     } catch (err: any) {
-      setError(err.message || "Authentication failed");
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
