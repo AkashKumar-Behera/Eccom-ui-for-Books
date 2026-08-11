@@ -5,10 +5,14 @@ import Image from "next/image";
 import { Search, User, ShoppingBag, Menu, ChevronDown, X } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
 
+import { useAuth } from "@/context/AuthContext";
+
 export default function Home() {
+  const { user, logout } = useAuth();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
 
   const categories = [
     { name: "Notebooks", href: "/category/notebooks" },
@@ -116,90 +120,170 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
-          {/* Backdrop */}
-          <div
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
-          ></div>
+      {/* Mobile Navigation Drawer Overlay & Container */}
+      <div
+        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${
+          isMobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={`fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-300 ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+        ></div>
 
-          {/* Sliding Side Drawer */}
-          <div className="relative w-4/5 max-w-xs bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-in slide-in-from-left duration-300">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#98C4C5]/30 mb-6">
-                <span className="text-lg font-bold text-[#1E4B4C] font-moresugar">
-                  MENU
-                </span>
+        {/* Sliding Side Drawer */}
+        <div
+          className={`relative w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 transition-transform duration-300 ease-out transform ${
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          {/* Fixed Drawer Header */}
+          <div className="flex items-center justify-between p-6 pb-4 border-b border-[#98C4C5]/30 bg-white">
+            <span className="text-lg font-bold text-[#1E4B4C] font-moresugar">
+              MENU
+            </span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-1 text-zinc-500 hover:text-zinc-800 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Scrollable Content Body ONLY */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {/* User Profile Avatar Section */}
+            <div className="pb-6 border-b border-zinc-100 flex flex-col items-center text-center">
+              {user ? (
+                <>
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#98C4C5] shadow-md mb-3 flex items-center justify-center bg-[#98C4C5]/20 text-[#1E4B4C]">
+                    {user.photoURL ? (
+                      <Image
+                        src={user.photoURL}
+                        alt="User Avatar"
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl font-bold font-moresugar uppercase">
+                        {(user.displayName || user.email || user.phoneNumber || "U")[0]}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-base font-bold text-[#1E4B4C] font-moresugar truncate max-w-[200px]">
+                    {user.displayName || "Welcome Back!"}
+                  </h3>
+                  <p className="text-xs text-zinc-500 font-sans mt-0.5 truncate max-w-[200px]">
+                    {user.email || user.phoneNumber}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="w-16 h-16 rounded-full bg-zinc-100 border-2 border-dashed border-zinc-300 mb-3 flex items-center justify-center text-zinc-400">
+                    <User className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-sm font-bold text-zinc-700 font-moresugar">
+                    Guest User
+                  </h3>
+                  <p className="text-xs text-zinc-400 font-sans mt-0.5">
+                    Sign in to track orders & wishlist
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Shop Categories Accordion */}
+            <div className="space-y-4 font-moresugar mt-4">
+              <div className="border-b border-zinc-100 pb-3">
                 <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-1 text-zinc-500 hover:text-zinc-800"
+                  onClick={() => setIsMobileCategoriesOpen(!isMobileCategoriesOpen)}
+                  className="w-full flex items-center justify-between py-1 text-[#1E4B4C]"
                 >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Mobile Shop Categories Accordion */}
-              <div className="space-y-4 font-moresugar">
-                <div className="border-b border-zinc-100 pb-3">
-                  <span className="text-xs font-extrabold text-[#1E4B4C] uppercase tracking-wider block mb-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider">
                     CATEGORIES
                   </span>
-                  <div className="space-y-1 pl-2">
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      isMobileCategoriesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Collapsible Categories List */}
+                {isMobileCategoriesOpen && (
+                  <div className="space-y-1 pl-2 pt-2 animate-in fade-in slide-in-from-top-1 duration-200">
                     {categories.map((cat) => (
                       <a
                         key={cat.name}
                         href={cat.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-sm text-zinc-700 hover:text-[#1E4B4C]"
+                        className="block py-2 text-sm text-zinc-700 hover:text-[#1E4B4C] transition-colors"
                       >
                         {cat.name}
                       </a>
                     ))}
                   </div>
-                </div>
-
-                <a
-                  href="#"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
-                >
-                  NEW IN
-                </a>
-                <a
-                  href="#"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
-                >
-                  BESTSELLERS
-                </a>
-                <a
-                  href="#"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
-                >
-                  OUR DIARY
-                </a>
+                )}
               </div>
-            </div>
 
-            {/* Account Action in Mobile Drawer */}
-            <div className="pt-6 border-t border-zinc-100">
+              <a
+                href="#"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+              >
+                NEW IN
+              </a>
+              <a
+                href="#"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+              >
+                BESTSELLERS
+              </a>
+              <a
+                href="#"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+              >
+                OUR DIARY
+              </a>
+            </div>
+          </div>
+
+          {/* Fixed Drawer Footer (Conditional Button: Account/Sign In vs Logout) */}
+          <div className="p-6 pt-4 border-t border-zinc-100 bg-white">
+            {user ? (
+              <button
+                onClick={() => {
+                  logout();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 border border-red-200 py-3 rounded-full font-bold font-moresugar hover:bg-red-100 transition-all"
+              >
+                <User className="w-4 h-4" />
+                Sign Out / Logout
+              </button>
+            ) : (
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   setIsAuthOpen(true);
                 }}
-                className="w-full flex items-center justify-center gap-2 bg-[#98C4C5] text-[#1E4B4C] py-3 rounded-full font-bold font-moresugar"
+                className="w-full flex items-center justify-center gap-2 bg-[#98C4C5] text-[#1E4B4C] py-3 rounded-full font-bold font-moresugar shadow-sm hover:bg-[#7AB3B4] transition-all"
               >
                 <User className="w-4 h-4" />
                 Account / Sign In
               </button>
-            </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
 
       {/* 3rd Div: Hero Banner Section (2078:757 Aspect Ratio with Natural Colors Hover Effect) */}
       <section className="group relative w-full aspect-[2078/757] overflow-hidden cursor-pointer">
