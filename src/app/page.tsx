@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Search, User, ShoppingBag, Menu, ChevronDown, X } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
+import ThemeToggle from "@/components/ThemeToggle";
 
 import { useAuth } from "@/context/AuthContext";
 
@@ -25,20 +26,20 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-white text-zinc-900">
+    <div className="min-h-screen flex flex-col font-sans bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
       {/* 1st Div: Top Offers Banner */}
-      <div className="w-full bg-[#98C4C5] text-[#1E4B4C] py-1.5 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide font-moresugar">
+      <div className="w-full bg-[var(--bg-banner)] text-[var(--text-banner)] py-1.5 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide font-moresugar transition-colors">
         Flat 20% OFF Sitewide
       </div>
 
       {/* 2nd Div: Navigation Bar */}
-      <header className="w-full border-b border-[#98C4C5]/30 bg-white sticky top-0 z-40">
+      <header className="w-full border-b border-[var(--border-color)] bg-[var(--bg-primary)] sticky top-0 z-40 transition-colors">
         <div className="w-full px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
           {/* Left Menu / Navigation Links (Width: 1/3) */}
           <div className="flex-1 flex items-center justify-start">
-            <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold tracking-wider text-zinc-700 font-moresugar">
+            <nav className="hidden min-[1300px]:flex items-center gap-6 text-xs sm:text-sm font-semibold tracking-wider text-[var(--text-secondary)] font-moresugar">
               
               {/* SHOP Dropdown */}
               <div
@@ -48,7 +49,7 @@ export default function Home() {
               >
                 <button
                   onClick={() => setIsShopOpen(!isShopOpen)}
-                  className="bg-[#98C4C5] text-[#1E4B4C] px-3.5 py-1.5 rounded transition-all hover:bg-[#7AB3B4] flex items-center gap-1.5"
+                  className="bg-[var(--btn-shop)] text-[var(--btn-shop-text)] px-3.5 py-1.5 rounded transition-all hover:bg-[var(--btn-shop-hover)] flex items-center gap-1.5"
                 >
                   SHOP
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isShopOpen ? "rotate-180" : ""}`} />
@@ -56,12 +57,12 @@ export default function Home() {
 
                 {/* Dropdown Menu Box */}
                 {isShopOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-56 bg-white border border-[#98C4C5]/30 rounded-2xl shadow-xl py-3 px-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-xl py-3 px-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     {categories.map((cat) => (
                       <a
                         key={cat.name}
                         href={cat.href}
-                        className="block px-4 py-2 text-xs font-semibold text-zinc-700 hover:text-[#1E4B4C] hover:bg-[#98C4C5]/15 rounded-xl transition-all font-moresugar"
+                        className="block px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--text-brand)] hover:bg-[var(--border-color)] rounded-xl transition-all font-moresugar"
                       >
                         {cat.name}
                       </a>
@@ -70,21 +71,21 @@ export default function Home() {
                 )}
               </div>
 
-              <a href="#" className="hover:text-[#2A6E70] transition-colors">
+              <a href="#" className="hover:text-[var(--text-brand)] transition-colors">
                 NEW IN
               </a>
-              <a href="#" className="hover:text-[#2A6E70] transition-colors">
+              <a href="#" className="hover:text-[var(--text-brand)] transition-colors">
                 BESTSELLERS
               </a>
-              <a href="#" className="hover:text-[#2A6E70] transition-colors">
+              <a href="#" className="hover:text-[var(--text-brand)] transition-colors">
                 OUR DIARY
               </a>
             </nav>
 
-            {/* Mobile Hamburger */}
+            {/* Side Menu Hamburger Button (Appears when width < 1300px) */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden p-2 text-zinc-700 hover:text-[#2A6E70]"
+              className="min-[1300px]:hidden p-2 text-[var(--text-primary)] hover:text-[var(--text-brand)]"
               aria-label="Open Mobile Menu"
             >
               <Menu className="w-6 h-6" />
@@ -93,26 +94,31 @@ export default function Home() {
 
           {/* Logo Center (Width: 1/3, Perfectly Centered) */}
           <div className="flex-1 text-center">
-            <a href="#" className="text-lg sm:text-2xl md:text-4xl font-bold tracking-normal sm:tracking-wider text-[#1E4B4C] font-moresugar inline-block uppercase whitespace-nowrap">
+            <a href="#" className="text-lg sm:text-2xl md:text-4xl font-bold tracking-normal sm:tracking-wider text-[var(--text-brand)] font-moresugar inline-block uppercase whitespace-nowrap">
               THE ABBIE STORE
             </a>
           </div>
 
           {/* Right Action Icons (Width: 1/3) */}
-          <div className="flex-1 flex items-center justify-end gap-4 sm:gap-6 text-zinc-700">
-            <button className="hover:text-[#2A6E70] transition-colors" aria-label="Search">
+          <div className="flex-1 flex items-center justify-end gap-3 sm:gap-5 text-[var(--text-primary)]">
+            {/* Theme Toggle Component in Navbar (Visible when width >= 950px) */}
+            <div className="hidden min-[950px]:block">
+              <ThemeToggle />
+            </div>
+
+            <button className="hover:text-[var(--text-brand)] transition-colors" aria-label="Search">
               <Search className="w-5 h-5" />
             </button>
             <button
               onClick={() => setIsAuthOpen(true)}
-              className="hover:text-[#2A6E70] transition-colors hidden sm:block"
+              className="hover:text-[var(--text-brand)] transition-colors hidden sm:block"
               aria-label="User Account"
             >
               <User className="w-5 h-5" />
             </button>
-            <button className="hover:text-[#2A6E70] transition-colors relative" aria-label="Cart">
+            <button className="hover:text-[var(--text-brand)] transition-colors relative" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-2 -right-2 bg-[#1E4B4C] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans">
+              <span className="absolute -top-2 -right-2 bg-[var(--text-brand)] text-[var(--bg-primary)] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans">
                 0
               </span>
             </button>
@@ -120,9 +126,9 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer Overlay & Container */}
+      {/* Navigation Drawer Overlay & Container (Triggers when width < 1300px) */}
       <div
-        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${
+        className={`fixed inset-0 z-50 min-[1300px]:hidden transition-all duration-300 ${
           isMobileMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -138,18 +144,24 @@ export default function Home() {
 
         {/* Sliding Side Drawer */}
         <div
-          className={`relative w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 transition-transform duration-300 ease-out transform ${
+          className={`relative w-4/5 max-w-xs bg-[var(--card-bg)] text-[var(--text-primary)] h-full shadow-2xl flex flex-col z-10 transition-all duration-300 ease-out transform ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* Fixed Drawer Header */}
-          <div className="flex items-center justify-between p-6 pb-4 border-b border-[#98C4C5]/30 bg-white">
-            <span className="text-lg font-bold text-[#1E4B4C] font-moresugar">
-              MENU
-            </span>
+          <div className="flex items-center justify-between p-6 pb-4 border-b border-[var(--border-color)] bg-[var(--card-bg)]">
+            <div className="flex items-center gap-3">
+              <span className="text-lg font-bold text-[var(--text-brand)] font-moresugar">
+                MENU
+              </span>
+              {/* Theme Toggle in Side Drawer (Visible only when width < 950px) */}
+              <div className="min-[950px]:hidden">
+                <ThemeToggle />
+              </div>
+            </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="p-1 text-zinc-500 hover:text-zinc-800 transition-colors"
+              className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -158,10 +170,10 @@ export default function Home() {
           {/* Scrollable Content Body ONLY */}
           <div className="flex-1 overflow-y-auto p-6">
             {/* User Profile Avatar Section */}
-            <div className="pb-6 border-b border-zinc-100 flex flex-col items-center text-center">
+            <div className="pb-6 border-b border-[var(--border-color)] flex flex-col items-center text-center">
               {user ? (
                 <>
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#98C4C5] shadow-md mb-3 flex items-center justify-center bg-[#98C4C5]/20 text-[#1E4B4C]">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[var(--border-color)] shadow-md mb-3 flex items-center justify-center bg-[var(--border-color)] text-[var(--text-brand)]">
                     {user.photoURL ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
@@ -176,22 +188,22 @@ export default function Home() {
                       </span>
                     )}
                   </div>
-                  <h3 className="text-base font-bold text-[#1E4B4C] font-moresugar truncate max-w-[200px]">
+                  <h3 className="text-base font-bold text-[var(--text-brand)] font-moresugar truncate max-w-[200px]">
                     {user.displayName || "Welcome Back!"}
                   </h3>
-                  <p className="text-xs text-zinc-500 font-sans mt-0.5 truncate max-w-[200px]">
+                  <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5 truncate max-w-[200px]">
                     {user.email || user.phoneNumber}
                   </p>
                 </>
               ) : (
                 <>
-                  <div className="w-16 h-16 rounded-full bg-zinc-100 border-2 border-dashed border-zinc-300 mb-3 flex items-center justify-center text-zinc-400">
+                  <div className="w-16 h-16 rounded-full bg-[var(--bg-secondary)] border-2 border-dashed border-[var(--border-color)] mb-3 flex items-center justify-center text-[var(--text-secondary)]">
                     <User className="w-8 h-8" />
                   </div>
-                  <h3 className="text-sm font-bold text-zinc-700 font-moresugar">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)] font-moresugar">
                     Guest User
                   </h3>
-                  <p className="text-xs text-zinc-400 font-sans mt-0.5">
+                  <p className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
                     Sign in to track orders & wishlist
                   </p>
                 </>
@@ -200,10 +212,10 @@ export default function Home() {
 
             {/* Mobile Shop Categories Accordion */}
             <div className="space-y-4 font-moresugar mt-4">
-              <div className="border-b border-zinc-100 pb-3">
+              <div className="border-b border-[var(--border-color)] pb-3">
                 <button
                   onClick={() => setIsMobileCategoriesOpen(!isMobileCategoriesOpen)}
-                  className="w-full flex items-center justify-between py-1 text-[#1E4B4C]"
+                  className="w-full flex items-center justify-between py-1 text-[var(--text-brand)]"
                 >
                   <span className="text-xs font-extrabold uppercase tracking-wider">
                     CATEGORIES
@@ -223,7 +235,7 @@ export default function Home() {
                         key={cat.name}
                         href={cat.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-sm text-zinc-700 hover:text-[#1E4B4C] transition-colors"
+                        className="block py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-brand)] transition-colors"
                       >
                         {cat.name}
                       </a>
@@ -235,21 +247,21 @@ export default function Home() {
               <a
                 href="#"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+                className="block py-2 text-sm text-[var(--text-primary)] hover:text-[var(--text-brand)]"
               >
                 NEW IN
               </a>
               <a
                 href="#"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+                className="block py-2 text-sm text-[var(--text-primary)] hover:text-[var(--text-brand)]"
               >
                 BESTSELLERS
               </a>
               <a
                 href="#"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+                className="block py-2 text-sm text-[var(--text-primary)] hover:text-[var(--text-brand)]"
               >
                 OUR DIARY
               </a>
@@ -257,14 +269,14 @@ export default function Home() {
           </div>
 
           {/* Fixed Drawer Footer (Conditional Button: Account/Sign In vs Logout) */}
-          <div className="p-6 pt-4 border-t border-zinc-100 bg-white">
+          <div className="p-6 pt-4 border-t border-[var(--border-color)] bg-[var(--card-bg)]">
             {user ? (
               <button
                 onClick={() => {
                   logout();
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 border border-red-200 py-3 rounded-full font-bold font-moresugar hover:bg-red-100 transition-all"
+                className="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-500 border border-red-500/30 py-3 rounded-full font-bold font-moresugar hover:bg-red-500/20 transition-all"
               >
                 <User className="w-4 h-4" />
                 Sign Out / Logout
@@ -275,7 +287,7 @@ export default function Home() {
                   setIsMobileMenuOpen(false);
                   setIsAuthOpen(true);
                 }}
-                className="w-full flex items-center justify-center gap-2 bg-[#98C4C5] text-[#1E4B4C] py-3 rounded-full font-bold font-moresugar shadow-sm hover:bg-[#7AB3B4] transition-all"
+                className="w-full flex items-center justify-center gap-2 bg-[var(--btn-shop)] text-[var(--btn-shop-text)] py-3 rounded-full font-bold font-moresugar shadow-sm hover:bg-[var(--btn-shop-hover)] transition-all"
               >
                 <User className="w-4 h-4" />
                 Account / Sign In
