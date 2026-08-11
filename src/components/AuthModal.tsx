@@ -125,19 +125,19 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-[#98C4C5]/30 animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">
+      <div className="relative w-full max-w-md bg-white rounded-3xl p-5 sm:p-8 shadow-2xl border border-[#98C4C5]/30 animate-in fade-in zoom-in duration-200 my-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-zinc-400 hover:text-zinc-700 transition-colors"
+          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-700 transition-colors p-1"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
         {user ? (
-          <div className="text-center py-6">
+          <div className="text-center py-4 sm:py-6">
             <h3 className="text-2xl font-bold text-[#1E4B4C] font-moresugar mb-2">
               Welcome Back!
             </h3>
@@ -154,7 +154,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </div>
         ) : (
           <div>
-            <h2 className="text-3xl font-bold text-[#1E4B4C] font-moresugar text-center mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1E4B4C] font-moresugar text-center mb-4 sm:mb-6 pt-1">
               {mode === "login"
                 ? "Sign In"
                 : mode === "signup"
@@ -172,9 +172,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <button
               onClick={handleGoogleSignIn}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 border border-zinc-200 py-3 rounded-full text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-all mb-4"
+              className="w-full flex items-center justify-center gap-3 border border-zinc-200 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-all mb-3 sm:mb-4"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

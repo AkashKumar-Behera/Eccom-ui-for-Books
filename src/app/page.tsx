@@ -29,13 +29,13 @@ export default function Home() {
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
       {/* 1st Div: Top Offers Banner */}
-      <div className="w-full bg-[#98C4C5] text-[#1E4B4C] py-2 px-4 text-center text-sm font-semibold tracking-wide font-moresugar">
+      <div className="w-full bg-[#98C4C5] text-[#1E4B4C] py-1.5 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide font-moresugar">
         Flat 20% OFF Sitewide
       </div>
 
       {/* 2nd Div: Navigation Bar */}
-      <header className="w-full border-b border-[#98C4C5]/30 bg-white sticky top-0 z-50">
-        <div className="w-full px-4 sm:px-8 h-20 flex items-center justify-between">
+      <header className="w-full border-b border-[#98C4C5]/30 bg-white sticky top-0 z-40">
+        <div className="w-full px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
           {/* Left Menu / Navigation Links (Width: 1/3) */}
           <div className="flex-1 flex items-center justify-start">
             <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold tracking-wider text-zinc-700 font-moresugar">
@@ -163,11 +163,11 @@ export default function Home() {
                 <>
                   <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#98C4C5] shadow-md mb-3 flex items-center justify-center bg-[#98C4C5]/20 text-[#1E4B4C]">
                     {user.photoURL ? (
-                      <Image
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
                         src={user.photoURL}
                         alt="User Avatar"
-                        width={64}
-                        height={64}
+                        referrerPolicy="no-referrer"
                         className="w-full h-full object-cover"
                       />
                     ) : (
