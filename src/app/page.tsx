@@ -2,11 +2,22 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Search, User, ShoppingBag, Menu } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, ChevronDown } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
 
 export default function Home() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isShopOpen, setIsShopOpen] = useState(false);
+
+  const categories = [
+    { name: "Notebooks", href: "/category/notebooks" },
+    { name: "Journals", href: "/category/journals" },
+    { name: "Weekly Planners", href: "/category/weekly-planners" },
+    { name: "Mini Notepads", href: "/category/mini-notepads" },
+    { name: "Colouring Books", href: "/category/colouring-books" },
+    { name: "To-do-lists", href: "/category/to-do-lists" },
+    { name: "Business Kit", href: "/category/business-kit" },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-white text-zinc-900">
@@ -23,9 +34,37 @@ export default function Home() {
           {/* Left Menu / Navigation Links (Width: 1/3) */}
           <div className="flex-1 flex items-center justify-start">
             <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold tracking-wider text-zinc-700 font-moresugar">
-              <a href="#" className="bg-[#98C4C5] text-[#1E4B4C] px-3.5 py-1.5 rounded transition-all hover:bg-[#7AB3B4]">
-                SHOP
-              </a>
+              
+              {/* SHOP Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setIsShopOpen(true)}
+                onMouseLeave={() => setIsShopOpen(false)}
+              >
+                <button
+                  onClick={() => setIsShopOpen(!isShopOpen)}
+                  className="bg-[#98C4C5] text-[#1E4B4C] px-3.5 py-1.5 rounded transition-all hover:bg-[#7AB3B4] flex items-center gap-1.5"
+                >
+                  SHOP
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isShopOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {/* Dropdown Menu Box */}
+                {isShopOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white border border-[#98C4C5]/30 rounded-2xl shadow-xl py-3 px-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    {categories.map((cat) => (
+                      <a
+                        key={cat.name}
+                        href={cat.href}
+                        className="block px-4 py-2 text-xs font-semibold text-zinc-700 hover:text-[#1E4B4C] hover:bg-[#98C4C5]/15 rounded-xl transition-all font-moresugar"
+                      >
+                        {cat.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <a href="#" className="hover:text-[#2A6E70] transition-colors">
                 NEW IN
               </a>

@@ -141,12 +141,91 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="bg-zinc-950 border border-zinc-800 rounded-3xl p-8 text-center py-16">
-          <Package className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-          <h4 className="text-xl font-bold text-white font-moresugar">Secret Admin Console Ready</h4>
-          <p className="text-sm text-zinc-400 mt-2 max-w-md mx-auto">
-            You are authorized via RTDB (<code className="text-[#98C4C5]">users/{user?.uid}/isAdmin: true</code>). Unauthenticated or non-admin visitors automatically receive a 404 Not Found error.
-          </p>
+        {/* Product Add & Category Management Section */}
+        <div className="bg-zinc-950 border border-zinc-800 rounded-3xl p-6 sm:p-8">
+          <h3 className="text-xl font-bold text-white font-moresugar mb-6 flex items-center gap-2">
+            <Package className="w-5 h-5 text-[#98C4C5]" />
+            Add New Product to Store
+          </h3>
+
+          <form className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Product Title */}
+              <div>
+                <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+                  Product Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Cute Floral Journal"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#98C4C5]"
+                />
+              </div>
+
+              {/* Category Dropdown */}
+              <div>
+                <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+                  Category
+                </label>
+                <select className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#98C4C5]">
+                  <option value="">Select Category...</option>
+                  <option value="notebooks">Notebooks</option>
+                  <option value="journals">Journals</option>
+                  <option value="weekly-planners">Weekly Planners</option>
+                  <option value="mini-notepads">Mini Notepads</option>
+                  <option value="colouring-books">Colouring Books</option>
+                  <option value="to-do-lists">To-do-lists</option>
+                  <option value="business-kit">Business Kit</option>
+                </select>
+              </div>
+
+              {/* Price */}
+              <div>
+                <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+                  Price (₹)
+                </label>
+                <input
+                  type="number"
+                  placeholder="499"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#98C4C5]"
+                />
+              </div>
+
+              {/* Stock Quantity */}
+              <div>
+                <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+                  Stock Quantity
+                </label>
+                <input
+                  type="number"
+                  placeholder="50"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#98C4C5]"
+                />
+              </div>
+            </div>
+
+            {/* Product Description */}
+            <div>
+              <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+                Description
+              </label>
+              <textarea
+                rows={3}
+                placeholder="Product highlights and details..."
+                className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-[#98C4C5]"
+              ></textarea>
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="bg-[#98C4C5] text-[#1E4B4C] px-6 py-3 rounded-full font-bold font-moresugar hover:bg-[#7AB3B4] transition-all"
+              >
+                Save Product
+              </button>
+            </div>
+          </form>
         </div>
       </main>
     </div>
