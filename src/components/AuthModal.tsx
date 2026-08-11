@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { X, Mail, Phone, LogIn } from "lucide-react";
+import { X, Mail, Phone, LogIn, Eye, EyeOff } from "lucide-react";
 import { RecaptchaVerifier, ConfirmationResult } from "firebase/auth";
 
 interface AuthModalProps {
@@ -24,6 +24,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [mode, setMode] = useState<"login" | "signup" | "phone">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
@@ -256,14 +257,28 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   required
                   className="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm focus:outline-none focus:border-[#98C4C5]"
                 />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm focus:outline-none focus:border-[#98C4C5]"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm focus:outline-none focus:border-[#98C4C5] pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 transition-colors p-1"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
                 <button
                   type="submit"
                   disabled={loading}

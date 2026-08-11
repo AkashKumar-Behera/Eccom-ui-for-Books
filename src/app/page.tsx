@@ -314,6 +314,7 @@ export default function Home() {
                 src="/grid_stickers.png"
                 alt="Journal Stickers"
                 fill
+                sizes="(max-width: 768px) 100vw, 25vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -329,6 +330,7 @@ export default function Home() {
                 src="/grid_coloring.png"
                 alt="Coloring Books"
                 fill
+                sizes="(max-width: 768px) 100vw, 25vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -346,6 +348,7 @@ export default function Home() {
                 src="/grid_pouches.png"
                 alt="Flat Pouches"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -364,6 +367,7 @@ export default function Home() {
                 src="/grid_laptop.png"
                 alt="Laptop Sleeves"
                 fill
+                sizes="(max-width: 768px) 100vw, 25vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -379,6 +383,7 @@ export default function Home() {
                 src="/grid_planner.png"
                 alt="Meal Planner"
                 fill
+                sizes="(max-width: 768px) 100vw, 25vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -402,6 +407,7 @@ export default function Home() {
               src="/post_desk_essentials.png"
               alt="Desk Essentials"
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
@@ -418,6 +424,7 @@ export default function Home() {
               src="/post_lifestyle.png"
               alt="Lifestyle"
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
@@ -434,6 +441,7 @@ export default function Home() {
               src="/post_home_decor.png"
               alt="Home Decor"
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
@@ -450,6 +458,7 @@ export default function Home() {
               src="/post_mindful_planning.png"
               alt="Mindful Planning"
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
