@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Search, User, ShoppingBag, Menu, ChevronDown } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, ChevronDown, X } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
 
 export default function Home() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const categories = [
     { name: "Notebooks", href: "/category/notebooks" },
@@ -77,7 +78,11 @@ export default function Home() {
             </nav>
 
             {/* Mobile Hamburger */}
-            <button className="md:hidden p-2 text-zinc-700 hover:text-[#2A6E70]">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 text-zinc-700 hover:text-[#2A6E70]"
+              aria-label="Open Mobile Menu"
+            >
               <Menu className="w-6 h-6" />
             </button>
           </div>
@@ -110,6 +115,91 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
+          ></div>
+
+          {/* Sliding Side Drawer */}
+          <div className="relative w-4/5 max-w-xs bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-in slide-in-from-left duration-300">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-[#98C4C5]/30 mb-6">
+                <span className="text-lg font-bold text-[#1E4B4C] font-moresugar">
+                  MENU
+                </span>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-1 text-zinc-500 hover:text-zinc-800"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Mobile Shop Categories Accordion */}
+              <div className="space-y-4 font-moresugar">
+                <div className="border-b border-zinc-100 pb-3">
+                  <span className="text-xs font-extrabold text-[#1E4B4C] uppercase tracking-wider block mb-2">
+                    CATEGORIES
+                  </span>
+                  <div className="space-y-1 pl-2">
+                    {categories.map((cat) => (
+                      <a
+                        key={cat.name}
+                        href={cat.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block py-2 text-sm text-zinc-700 hover:text-[#1E4B4C]"
+                      >
+                        {cat.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <a
+                  href="#"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+                >
+                  NEW IN
+                </a>
+                <a
+                  href="#"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+                >
+                  BESTSELLERS
+                </a>
+                <a
+                  href="#"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 text-sm text-zinc-800 hover:text-[#1E4B4C]"
+                >
+                  OUR DIARY
+                </a>
+              </div>
+            </div>
+
+            {/* Account Action in Mobile Drawer */}
+            <div className="pt-6 border-t border-zinc-100">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsAuthOpen(true);
+                }}
+                className="w-full flex items-center justify-center gap-2 bg-[#98C4C5] text-[#1E4B4C] py-3 rounded-full font-bold font-moresugar"
+              >
+                <User className="w-4 h-4" />
+                Account / Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 3rd Div: Hero Banner Section (2078:757 Aspect Ratio with Natural Colors Hover Effect) */}
       <section className="group relative w-full aspect-[2078/757] overflow-hidden cursor-pointer">
@@ -291,5 +381,3 @@ export default function Home() {
     </div>
   );
 }
-
-
