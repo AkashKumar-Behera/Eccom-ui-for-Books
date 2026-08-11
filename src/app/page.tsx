@@ -156,7 +156,7 @@ export default function Home() {
 
         {/* Sliding Side Drawer */}
         <div
-          className={`relative w-4/5 max-w-xs bg-[var(--card-bg)] text-[var(--text-primary)] h-full shadow-2xl flex flex-col z-10 transition-all duration-300 ease-out transform ${
+          className={`relative w-4/5 max-w-xs bg-[var(--card-bg)] text-[var(--text-primary)] h-full shadow-2xl flex flex-col z-10 transition-all duration-300 ease-out transform no-scrollbar ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -174,7 +174,7 @@ export default function Home() {
           </div>
 
           {/* Scrollable Content Body ONLY */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto no-scrollbar p-6">
             {/* User Profile Avatar Section */}
             <div className="pb-6 border-b border-[var(--border-color)] flex flex-col items-center text-center">
               {user ? (
