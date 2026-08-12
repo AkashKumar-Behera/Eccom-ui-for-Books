@@ -27,8 +27,8 @@ const moreSugar = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "The Abbie Store",
-  description: "Pinterest Inspired Daily Essentials",
+  title: "The Abbie Store - Cute Stationery, Notebooks & Planners",
+  description: "The Abbie Store is an e-commerce platform for cute stationery, premium notebooks, weekly planners, and anime goods.",
 };
 
 export default function RootLayout({

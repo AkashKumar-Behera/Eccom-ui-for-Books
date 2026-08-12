@@ -43,7 +43,7 @@ export default function Home() {
 
       {/* 1st Div: Top Offers Banner */}
       <div className="w-full bg-[var(--bg-banner)] text-[var(--text-banner)] py-1.5 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide font-moresugar transition-colors">
-        Flat 20% OFF Sitewide
+        Flat 20% OFF Sitewide | Online Store for Cute Stationery, Notebooks & Planners
       </div>
 
       {/* 2nd Div: Navigation Bar */}
