@@ -499,6 +499,21 @@ export default function Home() {
 
         </div>
       </section>
+
+      {/* Footer Section */}
+      <footer className="w-full border-t border-[var(--border-color)] bg-[var(--bg-primary)] py-8 px-4 sm:px-8 mt-12 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm font-moresugar text-[var(--text-secondary)]">
+          <p>© 2026 The Abbie Store. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <a href="/privacy-policy" className="hover:text-[var(--text-brand)] transition-colors">
+              Privacy Policy
+            </a>
+            <a href="/terms-and-conditions" className="hover:text-[var(--text-brand)] transition-colors">
+              Terms & Conditions
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

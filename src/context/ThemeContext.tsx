@@ -14,11 +14,11 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
+  const [theme, setThemeState] = useState<Theme>("light");
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    const savedTheme = (localStorage.getItem("app-theme") as Theme) || "system";
+    const savedTheme = (localStorage.getItem("app-theme") as Theme) || "light";
     setThemeState(savedTheme);
   }, []);
 
@@ -27,11 +27,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     const applyTheme = (currentTheme: Theme) => {
       let activeTheme: "light" | "dark" = "light";
-      if (currentTheme === "system") {
-        const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        activeTheme = systemDark ? "dark" : "light";
+      if (currentTheme === "dark") {
+        activeTheme = "dark";
       } else {
-        activeTheme = currentTheme;
+        activeTheme = "light";
       }
 
       setResolvedTheme(activeTheme);
@@ -40,17 +39,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     applyTheme(theme);
-
-    // Media query listener for system theme changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      if (theme === "system") {
-        applyTheme("system");
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
