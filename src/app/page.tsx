@@ -317,12 +317,24 @@ export default function Home() {
       <section className="group relative w-full aspect-[2078/757] overflow-hidden cursor-pointer">
         <Image
           src="/banner.png"
-          alt="The Abbie Store Banner"
+          alt="The Abbie Store - Online E-Commerce Store for Cute Stationery, Notebooks, Planners and Kawaii Goodies"
           width={2078}
           height={757}
           priority
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
+      </section>
+
+      {/* App Purpose Statement Bar for Google Auth Compliance */}
+      <section className="w-full bg-[var(--bg-secondary)] border-y border-[var(--border-color)] py-4 px-4 text-center">
+        <div className="max-w-4xl mx-auto space-y-1">
+          <h1 className="text-xl sm:text-2xl font-bold font-moresugar text-[var(--text-brand)]">
+            Welcome to The Abbie Store
+          </h1>
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans">
+            The Abbie Store is an e-commerce platform offering premium notebooks, journals, weekly planners, anime merchandise, and cute stationery goodies to brighten your everyday workspace.
+          </p>
+        </div>
       </section>
 
       {/* 4th Section: Happy Shopping Grid Section */}
