@@ -106,8 +106,8 @@ export default function Home() {
 
           {/* Logo Center (Width: 1/3, Perfectly Centered) */}
           <div className="flex-1 text-center">
-            <a href="#" className="text-lg sm:text-2xl md:text-4xl font-bold tracking-normal sm:tracking-wider text-[var(--text-brand)] font-moresugar inline-block uppercase whitespace-nowrap">
-              THE ABBIE STORE
+            <a href="#" className="text-lg sm:text-2xl md:text-4xl font-bold tracking-normal sm:tracking-wider text-[var(--text-brand)] font-moresugar inline-block whitespace-nowrap">
+              The Abbie Store
             </a>
           </div>
 
