@@ -5,8 +5,91 @@ import Image from "next/image";
 import { Search, User, ShoppingBag, Menu, ChevronDown, X } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
 import ThemeToggle from "@/components/ThemeToggle";
+import Footer from "@/components/Footer";
 
 import { useAuth } from "@/context/AuthContext";
+
+interface CategoryItem {
+  name: string;
+  href: string;
+}
+
+interface CategoryGroup {
+  title: string;
+  items: CategoryItem[];
+}
+
+function TabbedShopMenu({
+  shopCategories,
+  setIsShopOpen,
+}: {
+  shopCategories: CategoryGroup[];
+  setIsShopOpen: (open: boolean) => void;
+}) {
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const activeGroup = shopCategories[activeTabIndex] || shopCategories[0];
+
+  const iconsMap: Record<string, string> = {
+    "DESK ESSENTIALS": "📓",
+    LIFESTYLE: "✨",
+    "MINDFUL PLANNING": "📅",
+    "HOME DECOR": "🖼️",
+  };
+
+  return (
+    <div className="space-y-4 p-1">
+      {/* Top Horizontal Category Pills Bar */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-[var(--border-color)]">
+        {shopCategories.map((group, idx) => {
+          const isActive = activeTabIndex === idx;
+          return (
+            <button
+              key={group.title}
+              onClick={() => setActiveTabIndex(idx)}
+              onMouseEnter={() => setActiveTabIndex(idx)}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold font-moresugar whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                isActive
+                  ? "bg-[var(--btn-shop)] text-[var(--btn-shop-text)] shadow-sm scale-105"
+                  : "bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-brand)] hover:bg-[var(--border-color)]"
+              }`}
+            >
+              <span>{iconsMap[group.title] || "🌸"}</span>
+              <span>{group.title}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Content Area: Items grid for selected category */}
+      <div className="bg-[var(--bg-secondary)]/50 rounded-2xl p-4 border border-[var(--border-color)]/60">
+        <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-[var(--border-color)]/40">
+          <span className="text-xs font-extrabold text-[var(--text-brand)] font-moresugar tracking-wider uppercase">
+            {activeGroup.title}
+          </span>
+          <span className="text-[10px] font-medium text-[var(--text-secondary)] font-sans">
+            {activeGroup.items.length} Products
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          {activeGroup.items.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              onClick={() => setIsShopOpen(false)}
+              className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-bg)] hover:bg-[var(--btn-shop)]/20 border border-[var(--border-color)]/50 text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--text-brand)] font-sans transition-all duration-150 group shadow-2xs hover:shadow-xs"
+            >
+              <span>{item.name}</span>
+              <span className="text-xs text-[var(--text-brand)] opacity-0 group-hover:opacity-100 transition-opacity">
+                →
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const { user, logout } = useAuth();
@@ -27,14 +110,47 @@ export default function Home() {
     };
   }, [isMobileMenuOpen]);
 
-  const categories = [
-    { name: "Notebooks", href: "/category/notebooks" },
-    { name: "Journals", href: "/category/journals" },
-    { name: "Weekly Planners", href: "/category/weekly-planners" },
-    { name: "Mini Notepads", href: "/category/mini-notepads" },
-    { name: "Colouring Books", href: "/category/colouring-books" },
-    { name: "To-do-lists", href: "/category/to-do-lists" },
-    { name: "Business Kit", href: "/category/business-kit" },
+  const shopCategories = [
+    {
+      title: "DESK ESSENTIALS",
+      items: [
+        { name: "Notebooks", href: "/category/notebooks" },
+        { name: "Mini Notebooks", href: "/category/mini-notebooks" },
+        { name: "Dudu Bubu Notepads", href: "/category/dudu-bubu-notepads" },
+        { name: "Hardbound Notebooks", href: "/category/hardbound-notebooks" },
+      ],
+    },
+    {
+      title: "LIFESTYLE",
+      items: [
+        { name: "Coloring Books", href: "/category/coloring-books" },
+        { name: "Oversized Tees", href: "/category/oversized-tees" },
+        { name: "Laptop Sleeves", href: "/category/laptop-sleeves" },
+        { name: "Pouches", href: "/category/pouches" },
+        { name: "Stickers", href: "/category/stickers" },
+        { name: "Kawaii Stickers", href: "/category/kawaii-stickers" },
+        { name: "Tote Bags", href: "/category/tote-bags" },
+        { name: "Bag Charms", href: "/category/bag-charms" },
+        { name: "Journal Stickers", href: "/category/journal-stickers" },
+        { name: "Flat Pouches", href: "/category/flat-pouches" },
+      ],
+    },
+    {
+      title: "MINDFUL PLANNING",
+      items: [
+        { name: "Acrylic Planners", href: "/category/acrylic-planners" },
+        { name: "Meal Planner", href: "/category/meal-planner" },
+        { name: "Checklist", href: "/category/checklist" },
+        { name: "Paper Weekly Planner", href: "/category/paper-weekly-planner" },
+      ],
+    },
+    {
+      title: "HOME DECOR",
+      items: [
+        { name: "Fridge Magnets", href: "/category/fridge-magnets" },
+        { name: "Photo Frames", href: "/category/photo-frames" },
+      ],
+    },
   ];
 
   return (
@@ -55,30 +171,72 @@ export default function Home() {
               
               {/* SHOP Dropdown */}
               <div
-                className="relative"
+                className="relative group py-2"
                 onMouseEnter={() => setIsShopOpen(true)}
                 onMouseLeave={() => setIsShopOpen(false)}
               >
                 <button
                   onClick={() => setIsShopOpen(!isShopOpen)}
-                  className="bg-[var(--btn-shop)] text-[var(--btn-shop-text)] px-3.5 py-1.5 rounded transition-all hover:bg-[var(--btn-shop-hover)] flex items-center gap-1.5"
+                  className="bg-[var(--btn-shop)] text-[var(--btn-shop-text)] px-3.5 py-1.5 rounded transition-all hover:bg-[var(--btn-shop-hover)] flex items-center gap-1.5 cursor-pointer"
                 >
                   SHOP
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isShopOpen ? "rotate-180" : ""}`} />
                 </button>
 
-                {/* Dropdown Menu Box */}
+                {/* 4-Column Floating Dropdown Menu */}
                 {isShopOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-56 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-xl py-3 px-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    {categories.map((cat) => (
-                      <a
-                        key={cat.name}
-                        href={cat.href}
-                        className="block px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--text-brand)] hover:bg-[var(--border-color)] rounded-xl transition-all font-moresugar"
-                      >
-                        {cat.name}
-                      </a>
-                    ))}
+                  <div className="absolute top-full left-0 pt-2 w-[720px] z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="relative bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] p-6 space-y-4">
+                      {/* Top Pointer Arrow */}
+                      <div className="absolute -top-2 left-6 w-4 h-4 bg-[var(--card-bg)] border-t border-l border-[var(--border-color)] rotate-45" />
+
+                      <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-2.5">
+                        <span className="text-xs font-extrabold text-[var(--text-brand)] font-moresugar uppercase tracking-wider">
+                          CATEGORIES
+                        </span>
+                        <span className="text-[10px] text-[var(--text-secondary)] font-sans">
+                          Select to explore
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-4 gap-4">
+                        {shopCategories.map((group) => (
+                          <div key={group.title} className="space-y-2">
+                            {/* Section Badge */}
+                            <div className="text-[10px] font-bold text-[var(--text-brand)] uppercase tracking-wide bg-[var(--btn-shop)]/25 px-2 py-0.5 rounded-md inline-block font-moresugar whitespace-nowrap">
+                              {group.title}
+                            </div>
+
+                            {/* Section Links */}
+                            <ul className="space-y-1">
+                              {group.items.map((item) => (
+                                <li key={item.name}>
+                                  <a
+                                    href={item.href}
+                                    onClick={() => setIsShopOpen(false)}
+                                    className="text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--text-brand)] transition-colors hover:underline block py-0.5 font-sans"
+                                  >
+                                    {item.name}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Bottom Banner */}
+                      <div className="pt-2 border-t border-[var(--border-color)] flex items-center justify-between text-xs font-moresugar text-[var(--text-secondary)]">
+                        <span>Looking for something specific?</span>
+                        <a
+                          href="/shop"
+                          onClick={() => setIsShopOpen(false)}
+                          className="text-[var(--text-brand)] font-bold hover:underline"
+                        >
+                          All Products →
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -235,16 +393,25 @@ export default function Home() {
 
                 {/* Collapsible Categories List */}
                 {isMobileCategoriesOpen && (
-                  <div className="space-y-1 pl-2 pt-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                    {categories.map((cat) => (
-                      <a
-                        key={cat.name}
-                        href={cat.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-brand)] transition-colors"
-                      >
-                        {cat.name}
-                      </a>
+                  <div className="space-y-4 pl-2 pt-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                    {shopCategories.map((group) => (
+                      <div key={group.title} className="space-y-1.5">
+                        <span className="text-[10px] font-extrabold text-[var(--text-brand)] uppercase tracking-wider block opacity-80">
+                          {group.title}
+                        </span>
+                        <div className="space-y-1 pl-2">
+                          {group.items.map((item) => (
+                            <a
+                              key={item.name}
+                              href={item.href}
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="block py-1 text-xs text-[var(--text-secondary)] hover:text-[var(--text-brand)] transition-colors"
+                            >
+                              {item.name}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -323,18 +490,6 @@ export default function Home() {
           priority
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
-      </section>
-
-      {/* App Purpose Statement Bar for Google Auth Compliance */}
-      <section className="w-full bg-[var(--bg-secondary)] border-y border-[var(--border-color)] py-4 px-4 text-center">
-        <div className="max-w-4xl mx-auto space-y-1">
-          <h1 className="text-xl sm:text-2xl font-bold font-moresugar text-[var(--text-brand)]">
-            Welcome to The Abbie Store
-          </h1>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans">
-            The Abbie Store is an e-commerce platform offering premium notebooks, journals, weekly planners, anime merchandise, and cute stationery goodies to brighten your everyday workspace.
-          </p>
-        </div>
       </section>
 
       {/* 4th Section: Happy Shopping Grid Section */}
@@ -512,20 +667,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer className="w-full border-t border-[var(--border-color)] bg-[var(--bg-primary)] py-8 px-4 sm:px-8 mt-12 transition-colors">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm font-moresugar text-[var(--text-secondary)]">
-          <p>© 2026 The Abbie Store. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <a href="/privacy-policy" className="hover:text-[var(--text-brand)] transition-colors">
-              Privacy Policy
-            </a>
-            <a href="/terms-and-conditions" className="hover:text-[var(--text-brand)] transition-colors">
-              Terms & Conditions
-            </a>
-          </div>
-        </div>
-      </footer>
+      {/* Footer Component */}
+      <Footer />
     </div>
   );
 }
