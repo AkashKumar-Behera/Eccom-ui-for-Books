@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
-import { Search, User, ShoppingBag, Menu, ChevronDown, X } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, ChevronDown, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import AuthModal from "@/components/AuthModal";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -296,7 +296,7 @@ function HomeContent() {
               <User className="w-5 h-5" />
             </button>
             <button className="hover:text-[var(--text-brand)] transition-colors relative" aria-label="Cart">
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingCart className="w-5 h-5" />
               <span className="absolute -top-2 -right-2 bg-[var(--text-brand)] text-[var(--bg-primary)] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans">
                 0
               </span>
@@ -503,7 +503,7 @@ function HomeContent() {
 
       {/* 4th Section: Happy Shopping Grid Section */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <h2 className="text-3xl sm:text-5xl font-bold text-center text-[#1E4B4C] mb-8 sm:mb-12 font-moresugar">
+        <h2 className="text-3xl sm:text-5xl font-bold text-center text-[var(--text-brand)] mb-8 sm:mb-12 font-moresugar">
           Happy Shopping!
         </h2>
 

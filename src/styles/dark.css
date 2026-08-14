@@ -1,18 +1,18 @@
 .dark {
-  --bg-primary: #09090b;
-  --bg-secondary: #18181b;
+  --bg-primary: #0F1F20;
+  --bg-secondary: #152B2C;
   --bg-banner: #133435;
-  --bg-accent: #1e4d4e;
-  --text-banner: #98C4C5;
-  --text-brand: #98C4C5;
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --border-color: rgba(152, 196, 197, 0.2);
-  --card-bg: #18181b;
-  --card-shadow: rgba(0, 0, 0, 0.5);
-  --modal-bg: #18181b;
-  --btn-shop: #1e4d4e;
-  --btn-shop-text: #98C4C5;
+  --bg-accent: #1E4D4E;
+  --text-banner: #FFFFFF;
+  --text-brand: #FFFFFF;
+  --text-primary: #F4F4F5;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --card-bg: #152B2C;
+  --card-shadow: rgba(0, 0, 0, 0.4);
+  --modal-bg: #152B2C;
+  --btn-shop: #1E4D4E;
+  --btn-shop-text: #FFFFFF;
   --btn-shop-hover: #296668;
 }
 
