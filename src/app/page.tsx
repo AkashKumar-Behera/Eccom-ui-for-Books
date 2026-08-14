@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { Search, User, ShoppingBag, Menu, ChevronDown, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import AuthModal from "@/components/AuthModal";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
+import ComingSoon from "@/components/ComingSoon";
 
 import { useAuth } from "@/context/AuthContext";
 
@@ -91,7 +93,7 @@ function TabbedShopMenu({
   );
 }
 
-export default function Home() {
+function HomeContent() {
   const { user, logout } = useAuth();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
@@ -152,6 +154,20 @@ export default function Home() {
       ],
     },
   ];
+
+  const searchParams = useSearchParams();
+  const previewParam = searchParams.get("preview");
+
+  // Show Coming Soon on Production by default unless in development (localhost) or ?preview=true
+  const isDev = process.env.NODE_ENV === "development";
+  const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+  
+  // If in production or maintenance mode is explicitly on, and no preview query, show ComingSoon
+  const shouldShowComingSoon = (!isDev || isMaintenance) && previewParam !== "true" && previewParam !== "live";
+
+  if (shouldShowComingSoon) {
+    return <ComingSoon />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
@@ -670,5 +686,13 @@ export default function Home() {
       {/* Footer Component */}
       <Footer />
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[var(--bg-primary)]" />}>
+      <HomeContent />
+    </Suspense>
   );
 }
