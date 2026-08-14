@@ -125,7 +125,7 @@ function HomeContent() {
     {
       title: "LIFESTYLE",
       items: [
-        { name: "journal", href: "/category/coloring-books" },
+        { name: "Journal", href: "/category/coloring-books" },
         { name: "Oversized Tees", href: "/category/oversized-tees" },
         { name: "Planners & trackers", href: "/category/laptop-sleeves" },
         { name: "Pouches", href: "/category/pouches" },
@@ -133,7 +133,7 @@ function HomeContent() {
         { name: "Kawaii Stickers", href: "/category/kawaii-stickers" },
         { name: "Tote Bags", href: "/category/tote-bags" },
         { name: "Bag Charms", href: "/category/bag-charms" },
-        { name: "Students Notebook", href: "/category/journal-stickers" },
+        { name: "Students Notebook", href: "/category/Journal-stickers" },
         { name: "Business Kit", href: "/category/flat-pouches" },
       ],
     },
@@ -172,11 +172,6 @@ function HomeContent() {
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
-
-      {/* 1st Div: Top Offers Banner */}
-      <div className="w-full bg-[var(--bg-banner)] text-[var(--text-banner)] py-1.5 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide font-moresugar transition-colors">
-        Flat 20% OFF Sitewide | Online Store for Cute Stationery, Notebooks & Planners
-      </div>
 
       {/* 2nd Div: Navigation Bar */}
       <header className="w-full border-b border-[var(--border-color)] bg-[var(--bg-primary)] sticky top-0 z-40 transition-colors">
@@ -537,14 +532,14 @@ function HomeContent() {
           <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
             <Image
               src="/grid_coloring.png"
-              alt="journal"
+              alt="Journal"
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
             <div className="relative z-10 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">journal</h3>
+              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Journal</h3>
               <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
@@ -565,18 +560,18 @@ function HomeContent() {
             </div>
           </div>
 
-          {/* Card 4: Weekly Planners */}
+          {/* Card 4: Planners */}
           <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
             <Image
               src="/grid_laptop.png"
-              alt="Weekly Planners"
+              alt="Planners"
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
             <div className="relative z-10 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Weekly Planners</h3>
+              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Planners</h3>
               <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
