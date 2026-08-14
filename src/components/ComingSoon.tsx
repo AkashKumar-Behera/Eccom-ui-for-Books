@@ -64,7 +64,7 @@ export default function ComingSoon() {
 
         {/* Categories Preview Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 max-w-xl pt-2">
-          {["📓 Notebooks", "✨ Journals", "📅 Planners", "🎨 Coloring Books", "🌸 Kawaii Stickers", "👜 Tote Bags"].map((pill) => (
+          {["📓 Notebooks", "✨ Journals", "📅 Planners", "🎨 Coloring Books", "💼 Business Kit"].map((pill) => (
             <span
               key={pill}
               className="px-3.5 py-1.5 rounded-full bg-white/70 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-bold font-moresugar text-[#1E4B4C] dark:text-[#98C4C5] shadow-2xs"

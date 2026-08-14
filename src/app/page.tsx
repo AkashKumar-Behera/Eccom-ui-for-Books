@@ -125,16 +125,16 @@ function HomeContent() {
     {
       title: "LIFESTYLE",
       items: [
-        { name: "Coloring Books", href: "/category/coloring-books" },
+        { name: "journal", href: "/category/coloring-books" },
         { name: "Oversized Tees", href: "/category/oversized-tees" },
-        { name: "Laptop Sleeves", href: "/category/laptop-sleeves" },
+        { name: "Planners & trackers", href: "/category/laptop-sleeves" },
         { name: "Pouches", href: "/category/pouches" },
         { name: "Stickers", href: "/category/stickers" },
         { name: "Kawaii Stickers", href: "/category/kawaii-stickers" },
         { name: "Tote Bags", href: "/category/tote-bags" },
         { name: "Bag Charms", href: "/category/bag-charms" },
-        { name: "Journal Stickers", href: "/category/journal-stickers" },
-        { name: "Flat Pouches", href: "/category/flat-pouches" },
+        { name: "Students Notebook", href: "/category/journal-stickers" },
+        { name: "Business Kit", href: "/category/flat-pouches" },
       ],
     },
     {
@@ -514,169 +514,70 @@ function HomeContent() {
           Happy Shopping!
         </h2>
 
-        {/* Grid Container matching screenshot layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+        {/* Clean 4-Column Balanced Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Left Column (Width: 3/12 on md screen, 2 Stacked Cards) */}
-          <div className="md:col-span-3 flex flex-col gap-6">
-            {/* Card 1: Journal Stickers */}
-            <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-64 md:h-1/2 flex flex-col justify-end p-6 cursor-pointer">
-              <Image
-                src="/grid_stickers.png"
-                alt="Journal Stickers"
-                fill
-                sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Journal Stickers</h3>
-                <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
-              </div>
-            </div>
-
-            {/* Card 2: Coloring Books */}
-            <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-64 md:h-1/2 flex flex-col justify-end p-6 cursor-pointer">
-              <Image
-                src="/grid_coloring.png"
-                alt="Coloring Books"
-                fill
-                sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Coloring Books</h3>
-                <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Center Column (Width: 6/12 on md screen, 1 Main Featured Tall Card) */}
-          <div className="md:col-span-6">
-            <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-96 md:h-full min-h-[500px] flex flex-col justify-end p-8 cursor-pointer">
-              <Image
-                src="/grid_pouches.png"
-                alt="Flat Pouches"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="text-3xl sm:text-4xl font-bold font-moresugar">Flat Pouches</h3>
-                <p className="text-sm sm:text-base text-zinc-200 font-sans mt-1">Explore Collection</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column (Width: 3/12 on md screen, 2 Stacked Cards) */}
-          <div className="md:col-span-3 flex flex-col gap-6">
-            {/* Card 3: Laptop Sleeves */}
-            <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-64 md:h-1/2 flex flex-col justify-end p-6 cursor-pointer">
-              <Image
-                src="/grid_laptop.png"
-                alt="Laptop Sleeves"
-                fill
-                sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Laptop Sleeves</h3>
-                <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
-              </div>
-            </div>
-
-            {/* Card 4: Meal Planner */}
-            <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-64 md:h-1/2 flex flex-col justify-end p-6 cursor-pointer">
-              <Image
-                src="/grid_planner.png"
-                alt="Meal Planner"
-                fill
-                sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Meal Planner</h3>
-                <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 5th Section: 4-Column Feature Category Grid */}
-      <section className="w-full py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-0">
-          
-          {/* Post 1: DESK ESSENTIALS */}
-          <div className="group relative aspect-[3/4] sm:aspect-auto sm:h-[450px] md:h-[550px] overflow-hidden cursor-pointer">
+          {/* Card 1: Students Notebook */}
+          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
             <Image
-              src="/post_desk_essentials.png"
-              alt="Desk Essentials"
+              src="/grid_stickers.png"
+              alt="Students Notebook"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-            <div className="absolute bottom-8 inset-x-0 text-center z-10">
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-widest uppercase font-moresugar drop-shadow-md">
-                DESK ESSENTIALS
-              </h3>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="relative z-10 text-white">
+              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Students Notebook</h3>
+              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
-          {/* Post 2: LIFESTYLE */}
-          <div className="group relative aspect-[3/4] sm:aspect-auto sm:h-[450px] md:h-[550px] overflow-hidden cursor-pointer">
+          {/* Card 2: Journal */}
+          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
             <Image
-              src="/post_lifestyle.png"
-              alt="Lifestyle"
+              src="/grid_coloring.png"
+              alt="journal"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-            <div className="absolute bottom-8 inset-x-0 text-center z-10">
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-widest uppercase font-moresugar drop-shadow-md">
-                LIFESTYLE
-              </h3>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="relative z-10 text-white">
+              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">journal</h3>
+              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
-          {/* Post 3: HOME DECOR */}
-          <div className="group relative aspect-[3/4] sm:aspect-auto sm:h-[450px] md:h-[550px] overflow-hidden cursor-pointer">
+          {/* Card 3: Business Kit */}
+          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
             <Image
-              src="/post_home_decor.png"
-              alt="Home Decor"
+              src="/grid_pouches.png"
+              alt="Business Kit"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-            <div className="absolute bottom-8 inset-x-0 text-center z-10">
-              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-widest uppercase font-moresugar drop-shadow-md">
-                HOME DECOR
-              </h3>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="relative z-10 text-white">
+              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Business Kit</h3>
+              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
-          {/* Post 4: MINDFUL PLANNING */}
-          <div className="group relative aspect-[3/4] sm:aspect-auto sm:h-[450px] md:h-[550px] overflow-hidden cursor-pointer">
+          {/* Card 4: Weekly Planners */}
+          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
             <Image
-              src="/post_mindful_planning.png"
-              alt="Mindful Planning"
+              src="/grid_laptop.png"
+              alt="Weekly Planners"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-            <div className="absolute bottom-8 inset-x-0 text-center z-10">
-              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-widest uppercase font-moresugar drop-shadow-md">
-                MINDFUL PLANNING
-              </h3>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="relative z-10 text-white">
+              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Weekly Planners</h3>
+              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
