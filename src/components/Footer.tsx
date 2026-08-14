@@ -54,6 +54,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/privacy-policy" className="hover:text-white hover:underline transition-all">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
                 <Link href="/cancellation-and-refund" className="hover:text-white hover:underline transition-all">
                   Cancellation & Refund Policy
                 </Link>

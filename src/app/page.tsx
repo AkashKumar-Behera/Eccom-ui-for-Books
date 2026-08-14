@@ -32,10 +32,11 @@ function TabbedShopMenu({
   const activeGroup = shopCategories[activeTabIndex] || shopCategories[0];
 
   const iconsMap: Record<string, string> = {
-    "DESK ESSENTIALS": "📓",
-    LIFESTYLE: "✨",
-    "MINDFUL PLANNING": "📅",
-    "HOME DECOR": "🖼️",
+    "WRITE & NOTE": "✍️",
+    "PLAN & ORGANISE": "📅",
+    "RELAX & COLOUR": "🎨",
+    "BUSINESS ESSENTIALS": "💼",
+    "CUSTOM STUDIO": "✨",
   };
 
   return (
@@ -114,43 +115,38 @@ function HomeContent() {
 
   const shopCategories = [
     {
-      title: "DESK ESSENTIALS",
+      title: "WRITE & NOTE",
       items: [
         { name: "Notebooks", href: "/category/notebooks" },
-        { name: "Mini Notebooks", href: "/category/mini-notebooks" },
-        { name: "Dudu Bubu Notepads", href: "/category/dudu-bubu-notepads" },
-        { name: "Hardbound Notebooks", href: "/category/hardbound-notebooks" },
+        { name: "Journals", href: "/category/journals" },
+        { name: "Mini Notepads", href: "/category/mini-notepads" },
       ],
     },
     {
-      title: "LIFESTYLE",
+      title: "PLAN & ORGANISE",
       items: [
-        { name: "Journal", href: "/category/coloring-books" },
-        { name: "Oversized Tees", href: "/category/oversized-tees" },
-        { name: "Planners & trackers", href: "/category/laptop-sleeves" },
-        { name: "Pouches", href: "/category/pouches" },
-        { name: "Stickers", href: "/category/stickers" },
-        { name: "Kawaii Stickers", href: "/category/kawaii-stickers" },
-        { name: "Tote Bags", href: "/category/tote-bags" },
-        { name: "Bag Charms", href: "/category/bag-charms" },
-        { name: "Students Notebook", href: "/category/Journal-stickers" },
-        { name: "Business Kit", href: "/category/flat-pouches" },
+        { name: "Weekly Planners", href: "/category/weekly-planners" },
+        { name: "To-Do Lists", href: "/category/to-do-lists" },
       ],
     },
     {
-      title: "MINDFUL PLANNING",
+      title: "RELAX & COLOUR",
       items: [
-        { name: "Acrylic Planners", href: "/category/acrylic-planners" },
-        { name: "Meal Planner", href: "/category/meal-planner" },
-        { name: "Checklist", href: "/category/checklist" },
-        { name: "Paper Weekly Planner", href: "/category/paper-weekly-planner" },
+        { name: "Stress-Relief Colouring Books", href: "/category/colouring-books" },
       ],
     },
     {
-      title: "HOME DECOR",
+      title: "BUSINESS ESSENTIALS",
       items: [
-        { name: "Fridge Magnets", href: "/category/fridge-magnets" },
-        { name: "Photo Frames", href: "/category/photo-frames" },
+        { name: "Business Kit", href: "/category/business-kit" },
+      ],
+    },
+    {
+      title: "CUSTOM STUDIO",
+      items: [
+        { name: "Customized Notebook", href: "/category/customized-notebook" },
+        { name: "Customized Journal", href: "/category/customized-journal" },
+        { name: "Customized Business Kit", href: "/category/customized-business-kit" },
       ],
     },
   ];
@@ -196,9 +192,9 @@ function HomeContent() {
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isShopOpen ? "rotate-180" : ""}`} />
                 </button>
 
-                {/* 4-Column Floating Dropdown Menu */}
+                {/* 5-Column Floating Dropdown Menu */}
                 {isShopOpen && (
-                  <div className="absolute top-full left-0 pt-2 w-[720px] z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 pt-2 w-[880px] z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="relative bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] p-6 space-y-4">
                       {/* Top Pointer Arrow */}
                       <div className="absolute -top-2 left-6 w-4 h-4 bg-[var(--card-bg)] border-t border-l border-[var(--border-color)] rotate-45" />
@@ -212,7 +208,7 @@ function HomeContent() {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-4">
+                      <div className="grid grid-cols-5 gap-4">
                         {shopCategories.map((group) => (
                           <div key={group.title} className="space-y-2">
                             {/* Section Badge */}
@@ -511,70 +507,70 @@ function HomeContent() {
           Happy Shopping!
         </h2>
 
-        {/* Clean 4-Column Balanced Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 2x2 Grid on Mobile, 4-Column on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           
           {/* Card 1: Students Notebook */}
-          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
+          <div className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-52 sm:h-80 md:h-96 flex flex-col justify-end p-3.5 sm:p-6 cursor-pointer">
             <Image
               src="/grid_stickers.png"
               alt="Students Notebook"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
             <div className="relative z-10 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Students Notebook</h3>
-              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
+              <h3 className="text-sm sm:text-xl md:text-2xl font-bold font-moresugar leading-tight">Students Notebook</h3>
+              <p className="text-[10px] sm:text-xs md:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
           {/* Card 2: Journal */}
-          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
+          <div className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-52 sm:h-80 md:h-96 flex flex-col justify-end p-3.5 sm:p-6 cursor-pointer">
             <Image
               src="/grid_coloring.png"
               alt="Journal"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
             <div className="relative z-10 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Journal</h3>
-              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
+              <h3 className="text-sm sm:text-xl md:text-2xl font-bold font-moresugar leading-tight">Journal</h3>
+              <p className="text-[10px] sm:text-xs md:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
           {/* Card 3: Business Kit */}
-          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
+          <div className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-52 sm:h-80 md:h-96 flex flex-col justify-end p-3.5 sm:p-6 cursor-pointer">
             <Image
               src="/grid_pouches.png"
               alt="Business Kit"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
             <div className="relative z-10 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Business Kit</h3>
-              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
+              <h3 className="text-sm sm:text-xl md:text-2xl font-bold font-moresugar leading-tight">Business Kit</h3>
+              <p className="text-[10px] sm:text-xs md:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
           {/* Card 4: Planners */}
-          <div className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-80 sm:h-96 flex flex-col justify-end p-6 cursor-pointer">
+          <div className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-52 sm:h-80 md:h-96 flex flex-col justify-end p-3.5 sm:p-6 cursor-pointer">
             <Image
               src="/grid_laptop.png"
               alt="Planners"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
             <div className="relative z-10 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold font-moresugar">Planners</h3>
-              <p className="text-xs sm:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
+              <h3 className="text-sm sm:text-xl md:text-2xl font-bold font-moresugar leading-tight">Planners</h3>
+              <p className="text-[10px] sm:text-xs md:text-sm text-zinc-200 font-sans mt-0.5">Explore Collection</p>
             </div>
           </div>
 
