@@ -55,7 +55,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/cancellation-and-refund" className="hover:text-white hover:underline transition-all">
-                  Cancellation and Policy
+                  Cancellation & Refund Policy
                 </Link>
               </li>
               <li>
@@ -64,7 +64,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#faqs" className="hover:text-white hover:underline transition-all">
+                <Link href="/faqs" className="hover:text-white hover:underline transition-all">
                   FAQs
                 </Link>
               </li>

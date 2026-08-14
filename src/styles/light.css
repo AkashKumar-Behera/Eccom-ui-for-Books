@@ -1,17 +1,17 @@
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-banner: #98C4C5;
+  --bg-primary: #FAF8F5;
+  --bg-secondary: #F3EFEA;
+  --bg-banner: #A2C8C9;
   --bg-accent: #98C4C5;
   --text-banner: #1E4B4C;
   --text-brand: #1E4B4C;
-  --text-primary: #18181b;
-  --text-secondary: #52525b;
-  --border-color: rgba(152, 196, 197, 0.3);
-  --card-bg: #ffffff;
-  --card-shadow: rgba(0, 0, 0, 0.05);
-  --modal-bg: #ffffff;
-  --btn-shop: #98C4C5;
-  --btn-shop-text: #1E4B4C;
-  --btn-shop-hover: #7AB3B4;
+  --text-primary: #27272A;
+  --text-secondary: #52525B;
+  --border-color: rgba(30, 75, 76, 0.12);
+  --card-bg: #FFFFFF;
+  --card-shadow: rgba(30, 75, 76, 0.04);
+  --modal-bg: #FAF8F5;
+  --btn-shop: #1E4B4C;
+  --btn-shop-text: #FFFFFF;
+  --btn-shop-hover: #286061;
 }
