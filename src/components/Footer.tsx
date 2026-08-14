@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#1E4B4C] text-white font-sans transition-colors pt-12 pb-6">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 pb-10 border-b border-white/20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 pb-10 border-b border-white/20">
           
           {/* Col 1: Brand & Social */}
           <div className="flex flex-col space-y-4">
@@ -24,17 +24,6 @@ export default function Footer() {
 
             <div className="flex items-center gap-3 pt-1">
               <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#1877F2] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg"
-                aria-label="Facebook"
-              >
-                <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                </svg>
-              </a>
-              <a
                 href="https://www.instagram.com/theabbiestore.in"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -48,25 +37,30 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Exciting things */}
+          {/* Col 2: Quick Links */}
           <div className="flex flex-col space-y-3">
             <h4 className="font-sans font-bold text-base tracking-wide text-white mb-1 uppercase">
-              Exciting things
+              Quick Links
             </h4>
             <ul className="space-y-2 text-sm font-sans text-white/80">
               <li>
-                <Link href="/" className="hover:text-white hover:underline transition-all">
-                  Shop
-                </Link>
-              </li>
-              <li>
                 <Link href="/#about" className="hover:text-white hover:underline transition-all">
-                  About us
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#blogs" className="hover:text-white hover:underline transition-all">
-                  Blogs
+                <Link href="/terms-and-conditions" className="hover:text-white hover:underline transition-all">
+                  Terms and Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/cancellation-and-refund" className="hover:text-white hover:underline transition-all">
+                  Cancellation and Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping-and-delivery" className="hover:text-white hover:underline transition-all">
+                  Shipping and Delivery
                 </Link>
               </li>
               <li>
@@ -76,42 +70,13 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/#contact" className="hover:text-white hover:underline transition-all">
-                  Contact us
+                  Contact Us
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Unexciting things */}
-          <div className="flex flex-col space-y-3">
-            <h4 className="font-sans font-bold text-base tracking-wide text-white mb-1 uppercase">
-              Unexciting things
-            </h4>
-            <ul className="space-y-2 text-sm font-sans text-white/80">
-              <li>
-                <Link href="/terms-and-conditions" className="hover:text-white hover:underline transition-all">
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy" className="hover:text-white hover:underline transition-all">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/cancellation-and-refund" className="hover:text-white hover:underline transition-all">
-                  Cancellation & Refund Policies
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping-and-delivery" className="hover:text-white hover:underline transition-all">
-                  Shipping & Delivery
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 4: Get In Touch */}
+          {/* Col 3: Get In Touch */}
           <div className="flex flex-col space-y-4">
             <h4 className="font-sans font-bold text-base tracking-wide text-white mb-1 uppercase">
               Get In Touch
@@ -129,8 +94,8 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 shrink-0" />
-                <a href="mailto:support@theabbiestore.in" className="hover:underline">
-                  support@theabbiestore.in
+                <a href="mailto:info@theabbiestore.in" className="hover:underline">
+                  info@theabbiestore.in
                 </a>
               </div>
             </div>
