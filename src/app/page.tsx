@@ -158,12 +158,14 @@ function HomeContent() {
   const searchParams = useSearchParams();
   const previewParam = searchParams.get("preview");
 
-  // Show Coming Soon on Production by default unless in development (localhost) or ?preview=true
   const isDev = process.env.NODE_ENV === "development";
   const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+
+  // If ?soon=true or ?coming_soon=true is passed, show ComingSoon even on localhost
+  const soonParam = searchParams.get("soon") === "true" || searchParams.get("coming_soon") === "true";
   
-  // If in production or maintenance mode is explicitly on, and no preview query, show ComingSoon
-  const shouldShowComingSoon = (!isDev || isMaintenance) && previewParam !== "true" && previewParam !== "live";
+  // If in production (and no preview=true) OR if explicitly requested via ?soon=true, show ComingSoon
+  const shouldShowComingSoon = soonParam || ((!isDev || isMaintenance) && previewParam !== "true" && previewParam !== "live");
 
   if (shouldShowComingSoon) {
     return <ComingSoon />;
