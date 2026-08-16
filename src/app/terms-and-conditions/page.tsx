@@ -4,8 +4,8 @@ import Image from "next/image";
 import { ArrowLeft, Scale, ShoppingBag, Truck, AlertCircle } from "lucide-react";
 
 export const metadata = {
-  title: "Terms & Conditions | The Abbie Store",
-  description: "Terms and Conditions of Service for purchasing from The Abbie Store.",
+  title: "Terms of Service | The Abbie Store",
+  description: "Terms of Service for purchasing from The Abbie Store.",
 };
 
 export default function TermsAndConditions() {
@@ -37,10 +37,10 @@ export default function TermsAndConditions() {
             <Scale className="w-6 h-6" />
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[var(--text-brand)] tracking-tight">
-            Terms & Conditions
+            Terms of Service
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans">
-            Last Updated: August 13, 2026
+            Last Updated: August 16, 2026
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export default function TermsAndConditions() {
               <ShoppingBag className="w-5 h-5" /> 1. Store Terms & Acceptance
             </h2>
             <p className="text-[var(--text-secondary)]">
-              Welcome to <strong>The Abbie Store</strong>. By browsing, accessing, or purchasing products from our website, you agree to be bound by these Terms & Conditions. Please read them carefully before placing an order.
+              Welcome to <strong>The Abbie Store</strong>. By browsing, accessing, or purchasing products from our website, you agree to be bound by these Terms of Service. Please read them carefully before placing an order.
             </p>
           </section>
 
