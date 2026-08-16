@@ -136,7 +136,7 @@ export default function ComingSoon() {
             Privacy Policy
           </Link>
           <Link href="/terms-and-conditions" className="hover:text-[#98C4C5] transition-colors">
-            Terms &amp; Conditions
+            Terms of Service
           </Link>
           <a href="mailto:info@theabbiestore.in" className="hover:text-[#98C4C5] transition-colors">
             info@theabbiestore.in
