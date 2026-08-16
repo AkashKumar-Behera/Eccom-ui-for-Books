@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+      },
     ],
   },
   async rewrites() {
@@ -18,6 +26,14 @@ const nextConfig: NextConfig = {
       {
         source: "/__/auth/:path*",
         destination: "https://notebookbyabbie.firebaseapp.com/__/auth/:path*",
+      },
+      {
+        source: "/terms-of-service",
+        destination: "/terms-and-conditions",
+      },
+      {
+        source: "/terms",
+        destination: "/terms-and-conditions",
       },
     ];
   },
