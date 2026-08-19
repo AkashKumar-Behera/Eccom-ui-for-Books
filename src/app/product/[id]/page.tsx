@@ -160,9 +160,9 @@ export default function ProductDetailPage({
                   src={product.images[selectedImageIndex] || product.images[0]}
                   alt={product.title}
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
                   priority
-                  className="object-cover"
+                  className="object-cover transition-opacity duration-300"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-5xl sm:text-6xl text-[var(--text-secondary)]">

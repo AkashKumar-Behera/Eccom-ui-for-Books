@@ -55,6 +55,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import CustomSelect from "@/components/CustomSelect";
+import { compressImage } from "@/lib/imageCompressor";
 
 interface Product {
   id: string;
@@ -446,11 +447,16 @@ export default function AdminPage() {
       const uploadedImageUrls: string[] = [];
 
       for (const file of selectedFiles) {
-        const cleanFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-        const fileStoragePath = `products/${Date.now()}_${cleanFileName}`;
+        // High-speed client-side compression to lightweight WebP
+        const compressedBlob = await compressImage(file, 1400, 1400, 0.85);
+        const cleanName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_") + ".webp";
+        const fileStoragePath = `products/${Date.now()}_${cleanName}`;
         const imageRef = storageRef(storage, fileStoragePath);
 
-        const uploadResult = await uploadBytes(imageRef, file);
+        const uploadResult = await uploadBytes(imageRef, compressedBlob, {
+          contentType: "image/webp",
+          cacheControl: "public, max-age=31536000, immutable",
+        });
         const downloadUrl = await getDownloadURL(uploadResult.ref);
         uploadedImageUrls.push(downloadUrl);
       }
@@ -533,11 +539,16 @@ export default function AdminPage() {
     setIsSubmittingBanner(true);
 
     try {
-      const cleanFileName = bannerFile.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-      const fileStoragePath = `banners/${Date.now()}_${cleanFileName}`;
+      // High-speed client-side compression to lightweight WebP
+      const compressedBannerBlob = await compressImage(bannerFile, 2078, 1000, 0.88);
+      const cleanName = bannerFile.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_") + ".webp";
+      const fileStoragePath = `banners/${Date.now()}_${cleanName}`;
       const imageRef = storageRef(storage, fileStoragePath);
 
-      const uploadResult = await uploadBytes(imageRef, bannerFile);
+      const uploadResult = await uploadBytes(imageRef, compressedBannerBlob, {
+        contentType: "image/webp",
+        cacheControl: "public, max-age=31536000, immutable",
+      });
       const downloadUrl = await getDownloadURL(uploadResult.ref);
 
       await addDoc(collection(db, "banners"), {

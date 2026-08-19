@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2592000, // 30 Days cache TTL for blazing fast image load
     remotePatterns: [
       {
         protocol: "https",
