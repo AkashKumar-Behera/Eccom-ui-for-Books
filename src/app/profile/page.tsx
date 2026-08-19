@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { ref, get } from "firebase/database";
 import { db, rtdb } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
@@ -54,6 +54,10 @@ export default function ProfilePage() {
   const [city, setCity] = useState("");
   const [stateName, setStateName] = useState("");
   const [pincode, setPincode] = useState("");
+
+  // Orders State
+  const [userOrders, setUserOrders] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
 
   // 1. Redirect to home if not logged in after auth finishes
   useEffect(() => {
@@ -105,6 +109,40 @@ export default function ProfilePage() {
     }
 
     loadProfile();
+
+    // Fetch user orders in real-time
+    try {
+      const ordersQ = query(
+        collection(db, "orders"),
+        where("userId", "==", currentUser.uid)
+      );
+      const unsubscribeOrders = onSnapshot(
+        ordersQ,
+        (snapshot) => {
+          const list = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data(),
+          }));
+          // Sort client-side in case composite index is not yet built
+          list.sort((a: any, b: any) => {
+            const aTime = a.createdAt?.seconds || 0;
+            const bTime = b.createdAt?.seconds || 0;
+            return bTime - aTime;
+          });
+          setUserOrders(list);
+          setLoadingOrders(false);
+        },
+        (err) => {
+          console.warn("Could not load user orders:", err);
+          setLoadingOrders(false);
+        }
+      );
+
+      return () => unsubscribeOrders();
+    } catch (e) {
+      console.warn("Orders listener error:", e);
+      setLoadingOrders(false);
+    }
   }, [user]);
 
   // Save address & info to Firestore
@@ -368,18 +406,62 @@ export default function ProfilePage() {
                 Track your active shipments & order history
               </p>
 
-              <div className="py-8 text-center border border-dashed border-[var(--border-color)] rounded-2xl bg-[var(--bg-primary)]/50 p-4">
-                <Package className="w-8 h-8 text-[var(--text-secondary)] mx-auto mb-2 opacity-50" />
-                <p className="font-moresugar font-bold text-sm text-[var(--text-primary)]">No Orders Yet</p>
-                <p className="text-[11px] text-[var(--text-secondary)] font-sans mt-0.5 mb-4">
-                  Explore our kawaii stationery and place your first order!
-                </p>
-                <Link
-                  href="/shop"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] text-xs font-bold font-moresugar hover:scale-105 transition-all shadow-2xs"
-                >
-                  Start Shopping →
-                </Link>
+              <div className="space-y-3">
+                {loadingOrders ? (
+                  <div className="py-8 text-center text-[var(--text-secondary)]">
+                    <Loader2 className="w-6 h-6 animate-spin text-[var(--text-brand)] mx-auto mb-2" />
+                    <p className="text-xs font-moresugar">Loading your orders...</p>
+                  </div>
+                ) : userOrders.length === 0 ? (
+                  <div className="py-8 text-center border border-dashed border-[var(--border-color)] rounded-2xl bg-[var(--bg-primary)]/50 p-4">
+                    <Package className="w-8 h-8 text-[var(--text-secondary)] mx-auto mb-2 opacity-50" />
+                    <p className="font-moresugar font-bold text-sm text-[var(--text-primary)]">No Orders Yet</p>
+                    <p className="text-[11px] text-[var(--text-secondary)] font-sans mt-0.5 mb-4">
+                      Explore our kawaii stationery and place your first order!
+                    </p>
+                    <Link
+                      href="/shop"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] text-xs font-bold font-moresugar hover:scale-105 transition-all shadow-2xs"
+                    >
+                      Start Shopping →
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-3 max-h-96 overflow-y-auto pr-1 no-scrollbar">
+                    {userOrders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] space-y-2.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono font-bold text-xs text-[var(--text-brand)]">
+                            #{order.orderId || order.id.slice(0, 8)}
+                          </span>
+                          <span className="bg-emerald-500/15 text-emerald-500 border border-emerald-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full font-moresugar uppercase">
+                            {order.orderStatus || "Placed"}
+                          </span>
+                        </div>
+
+                        <div className="space-y-1">
+                          {order.items?.map((item: any, idx: number) => (
+                            <p key={idx} className="text-xs text-[var(--text-primary)] truncate font-sans">
+                              • {item.title} <span className="text-[var(--text-secondary)]">(x{item.quantity})</span>
+                            </p>
+                          ))}
+                        </div>
+
+                        <div className="pt-2 border-t border-[var(--border-color)] flex items-center justify-between text-xs font-sans">
+                          <span className="text-[var(--text-secondary)]">
+                            {order.paymentMethod || "COD"}
+                          </span>
+                          <span className="font-moresugar font-bold text-sm text-[var(--text-brand)]">
+                            ₹{(order.pricing?.grandTotal || order.pricing?.subtotal || 0).toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
