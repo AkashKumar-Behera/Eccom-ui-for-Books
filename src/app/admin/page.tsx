@@ -49,6 +49,7 @@ import {
   CheckCircle,
   Truck,
   IndianRupee,
+  Edit3,
 } from "lucide-react";
 import Image from "next/image";
 import CustomSelect from "@/components/CustomSelect";
@@ -168,6 +169,15 @@ export default function AdminPage() {
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
+
+  // Edit Product State
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editPrice, setEditPrice] = useState("");
+  const [editStock, setEditStock] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [isUpdatingProduct, setIsUpdatingProduct] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const bannerFileInputRef = useRef<HTMLInputElement>(null);
@@ -512,6 +522,39 @@ export default function AdminPage() {
       alert(`Could not update order status: ${err.message}`);
     } finally {
       setUpdatingOrderId(null);
+    }
+  };
+
+  // Open Edit Product Modal
+  const openEditModal = (p: Product) => {
+    setEditingProduct(p);
+    setEditTitle(p.title || "");
+    setEditCategory(p.category || "notebooks");
+    setEditPrice(String(p.price || ""));
+    setEditStock(String(p.stock || "0"));
+    setEditDescription(p.description || "");
+  };
+
+  // Save Edited Product
+  const handleSaveProductEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+
+    setIsUpdatingProduct(true);
+    try {
+      await updateDoc(doc(db, "products", editingProduct.id), {
+        title: editTitle.trim(),
+        category: editCategory,
+        price: Number(editPrice),
+        stock: Number(editStock),
+        description: editDescription.trim(),
+        updatedAt: serverTimestamp(),
+      });
+      setEditingProduct(null);
+    } catch (err: any) {
+      alert(`Failed to update product: ${err.message}`);
+    } finally {
+      setIsUpdatingProduct(false);
     }
   };
 
@@ -1255,18 +1298,29 @@ export default function AdminPage() {
 
                             {/* Actions */}
                             <td className="py-4 text-right pr-2">
-                              <button
-                                onClick={() => handleDeleteProduct(p.id)}
-                                disabled={deletingId === p.id}
-                                className="w-8 h-8 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-600 hover:text-white inline-flex items-center justify-center transition-all disabled:opacity-50 cursor-pointer"
-                                title="Delete Product"
-                              >
-                                {deletingId === p.id ? (
-                                  <Loader2 className="w-4 h-4 animate-spin" />
-                                ) : (
-                                  <Trash2 className="w-4 h-4" />
-                                )}
-                              </button>
+                              <div className="flex items-center justify-end gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => openEditModal(p)}
+                                  className="w-8 h-8 rounded-xl bg-[#98C4C5]/15 text-[#98C4C5] hover:bg-[#98C4C5] hover:text-[#121c1d] inline-flex items-center justify-center transition-all cursor-pointer"
+                                  title="Edit Product Details"
+                                >
+                                  <Edit3 className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteProduct(p.id)}
+                                  disabled={deletingId === p.id}
+                                  className="w-8 h-8 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-600 hover:text-white inline-flex items-center justify-center transition-all disabled:opacity-50 cursor-pointer"
+                                  title="Delete Product"
+                                >
+                                  {deletingId === p.id ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="w-4 h-4" />
+                                  )}
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -1802,6 +1856,140 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+        {/* Edit Product Modal Overlay */}
+        {editingProduct && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div
+              onClick={() => setEditingProduct(null)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+            />
+
+            <div className="relative w-full max-w-lg bg-[#121c1d] border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+              {/* Modal Header */}
+              <div className="p-5 border-b border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-[#98C4C5]/20 flex items-center justify-center text-[#98C4C5]">
+                    <Edit3 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-moresugar font-bold text-base text-white">
+                      Edit Product Details
+                    </h3>
+                    <p className="text-[10px] text-zinc-400">
+                      ID: #{editingProduct.id.slice(0, 8)}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setEditingProduct(null)}
+                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Modal Form */}
+              <form onSubmit={handleSaveProductEdit} className="p-5 overflow-y-auto space-y-4 no-scrollbar text-xs font-sans">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 font-sans">
+                    Product Title <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="w-full bg-[#0d1314] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#98C4C5]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 font-sans">
+                      Category <span className="text-red-400">*</span>
+                    </label>
+                    <CustomSelect
+                      size="md"
+                      options={CATEGORIES}
+                      value={editCategory}
+                      onChange={(val) => setEditCategory(val)}
+                      placeholder="Select Category"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 font-sans">
+                      Price (₹) <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="0"
+                      value={editPrice}
+                      onChange={(e) => setEditPrice(e.target.value)}
+                      className="w-full bg-[#0d1314] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#98C4C5]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 font-sans">
+                    Stock Units <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    value={editStock}
+                    onChange={(e) => setEditStock(e.target.value)}
+                    className="w-full bg-[#0d1314] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#98C4C5]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 font-sans">
+                    Description
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="w-full bg-[#0d1314] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#98C4C5] resize-none"
+                  />
+                </div>
+
+                <div className="pt-3 border-t border-white/10 flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setEditingProduct(null)}
+                    className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-300 hover:bg-white/10 font-moresugar cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isUpdatingProduct}
+                    className="px-6 py-2.5 rounded-xl bg-[#98C4C5] text-[#121c1d] text-xs font-bold font-moresugar hover:bg-[#7eb5b6] active:scale-95 transition-all shadow-md disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                  >
+                    {isUpdatingProduct ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Saving...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        <span>Save Changes</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </main>

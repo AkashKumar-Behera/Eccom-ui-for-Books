@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc, writeBatch, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
@@ -155,6 +155,20 @@ export default function CheckoutPage() {
       };
 
       await addDoc(collection(db, "orders"), orderData);
+
+      // Decrement stock in Firestore products collection
+      try {
+        const batch = writeBatch(db);
+        for (const item of items) {
+          const productRef = doc(db, "products", item.id);
+          batch.update(productRef, {
+            stock: increment(-item.quantity),
+          });
+        }
+        await batch.commit();
+      } catch (stockErr) {
+        console.warn("Stock decrement fallback:", stockErr);
+      }
 
       setPlacedOrder({
         orderId: generatedOrderId,

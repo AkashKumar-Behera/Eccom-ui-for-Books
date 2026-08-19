@@ -8,6 +8,7 @@ import { db } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import {
   Sparkles,
   ShoppingBag,
@@ -17,6 +18,7 @@ import {
   Loader2,
   ChevronRight,
   Eye,
+  Heart,
 } from "lucide-react";
 
 interface Product {
@@ -116,9 +118,10 @@ export default function CategoryPage({
 }) {
   const { slug } = use(params);
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState<"featured" | "price-low" | "price-high">("featured");
+  const [sortBy, setSortBy] = useState<"featured" | "price-low" | "price-high" | "newest">("featured");
 
   const meta = CATEGORY_META[slug] || {
     title: slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
@@ -252,6 +255,7 @@ export default function CategoryPage({
             {sortedProducts.map((product) => {
               const hasImage = product.images && product.images.length > 0;
               const isOutOfStock = (product.stock || 0) <= 0;
+              const isWishlisted = isInWishlist(product.id);
 
               return (
                 <div
@@ -259,23 +263,40 @@ export default function CategoryPage({
                   className="group flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Product Image */}
-                  <Link
-                    href={`/product/${product.id}`}
-                    className="relative aspect-square w-full bg-[var(--bg-secondary)] overflow-hidden block"
-                  >
-                    {hasImage ? (
-                      <Image
-                        src={product.images[0]}
-                        alt={product.title}
-                        fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-3xl sm:text-4xl">
-                        {meta.icon}
-                      </div>
-                    )}
+                  <div className="relative aspect-square w-full bg-[var(--bg-secondary)] overflow-hidden block">
+                    <Link href={`/product/${product.id}`} className="block w-full h-full">
+                      {hasImage ? (
+                        <Image
+                          src={product.images[0]}
+                          alt={product.title}
+                          fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-3xl sm:text-4xl">
+                          {meta.icon}
+                        </div>
+                      )}
+                    </Link>
+
+                    {/* Wishlist Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleWishlist(product.id);
+                      }}
+                      className={`absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xs z-10 cursor-pointer ${
+                        isWishlisted
+                          ? "bg-rose-500 text-white"
+                          : "bg-black/30 hover:bg-black/50 text-white"
+                      }`}
+                      title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                    >
+                      <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? "fill-current" : ""}`} />
+                    </button>
 
                     {/* Stock Status Badge */}
                     {isOutOfStock ? (
@@ -287,7 +308,7 @@ export default function CategoryPage({
                         In Stock
                       </span>
                     )}
-                  </Link>
+                  </div>
 
                   {/* Product Content */}
                   <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">

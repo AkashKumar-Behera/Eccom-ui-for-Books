@@ -8,6 +8,7 @@ import { db } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import {
   Sparkles,
   ShoppingBag,
@@ -21,6 +22,7 @@ import {
   Plus,
   Minus,
   Share2,
+  Heart,
 } from "lucide-react";
 
 interface Product {
@@ -41,6 +43,7 @@ export default function ProductDetailPage({
 }) {
   const { id } = use(params);
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -216,23 +219,34 @@ export default function ProductDetailPage({
           <div className="flex flex-col justify-between space-y-5 sm:space-y-6">
             <div className="space-y-3 sm:space-y-4">
               {/* Category tag & share */}
-              <div className="flex items-center justify-between">
-                <Link
-                  href={`/category/${product.category}`}
-                  className="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-[var(--btn-shop)]/20 text-[var(--text-brand)] border border-[var(--btn-shop)]/30 font-moresugar"
-                >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[11px] sm:text-xs font-bold text-[var(--text-brand)] uppercase tracking-wider font-moresugar">
                   {product.category?.replace(/-/g, " ")}
-                </Link>
+                </span>
 
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-brand)] transition-colors p-1.5 rounded-full hover:bg-[var(--border-color)]"
-                  title="Share product link"
-                >
-                  <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span>{isCopied ? "Link Copied!" : "Share"}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleWishlist(product.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold font-moresugar transition-all cursor-pointer ${
+                      isInWishlist(product.id)
+                        ? "bg-rose-500 text-white border-rose-500 shadow-xs"
+                        : "bg-[var(--card-bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:text-rose-500"
+                    }`}
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${isInWishlist(product.id) ? "fill-current" : ""}`} />
+                    <span>{isInWishlist(product.id) ? "Wishlisted" : "Wishlist"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="flex items-center gap-1 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer bg-[var(--card-bg)] border border-[var(--border-color)] px-3 py-1.5 rounded-full font-moresugar"
+                  >
+                    <Share2 className="w-3.5 h-3.5" />
+                    <span>{isCopied ? "Link Copied!" : "Share"}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Title */}

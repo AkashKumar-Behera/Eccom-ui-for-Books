@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, User, ShoppingCart, Menu, ChevronDown, X } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
+import SearchModal from "@/components/SearchModal";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
@@ -51,6 +52,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const { openCart, totalItems } = useCart();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
@@ -70,6 +72,7 @@ export default function Navbar() {
   return (
     <>
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Main Header */}
       <header className="w-full border-b border-[var(--border-color)] bg-[var(--bg-primary)] sticky top-0 z-40 transition-colors shadow-2xs backdrop-blur-md">
@@ -187,13 +190,14 @@ export default function Navbar() {
               <ThemeToggle />
             </div>
 
-            <Link
-              href="/shop"
-              className="p-1.5 sm:p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors"
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="p-1.5 sm:p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors cursor-pointer"
               aria-label="Search"
             >
               <Search className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-            </Link>
+            </button>
 
             {user ? (
               <Link

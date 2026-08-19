@@ -9,6 +9,9 @@ import { ref, get } from "firebase/database";
 import { db, rtdb } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import Image from "next/image";
 import {
   User,
   Mail,
@@ -25,6 +28,12 @@ import {
   ShoppingBag,
   Heart,
   Calendar,
+  X,
+  Printer,
+  ChevronRight,
+  Truck,
+  Clock,
+  Trash2,
 } from "lucide-react";
 
 interface UserProfileData {
@@ -55,9 +64,17 @@ export default function ProfilePage() {
   const [stateName, setStateName] = useState("");
   const [pincode, setPincode] = useState("");
 
+  const { addToCart } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist();
+
   // Orders State
   const [userOrders, setUserOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [selectedOrderForModal, setSelectedOrderForModal] = useState<any | null>(null);
+
+  // Wishlist Products State
+  const [wishlistProducts, setWishlistProducts] = useState<any[]>([]);
+  const [loadingWishlist, setLoadingWishlist] = useState(false);
 
   // 1. Redirect to home if not logged in after auth finishes
   useEffect(() => {
@@ -144,6 +161,28 @@ export default function ProfilePage() {
       setLoadingOrders(false);
     }
   }, [user]);
+
+  // 4. Fetch Wishlist Products in Real-time
+  useEffect(() => {
+    if (!user || wishlist.length === 0) {
+      setWishlistProducts([]);
+      return;
+    }
+
+    setLoadingWishlist(true);
+    try {
+      const unsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
+        const all = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        const filtered = all.filter((p: any) => wishlist.includes(p.id));
+        setWishlistProducts(filtered);
+        setLoadingWishlist(false);
+      });
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn("Could not load wishlist products:", e);
+      setLoadingWishlist(false);
+    }
+  }, [wishlist, user]);
 
   // Save address & info to Firestore
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -431,7 +470,8 @@ export default function ProfilePage() {
                     {userOrders.map((order) => (
                       <div
                         key={order.id}
-                        className="p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] space-y-2.5"
+                        onClick={() => setSelectedOrderForModal(order)}
+                        className="p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--btn-shop)] space-y-2.5 cursor-pointer transition-all hover:shadow-xs group"
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-mono font-bold text-xs text-[var(--text-brand)]">
@@ -454,9 +494,14 @@ export default function ProfilePage() {
                           <span className="text-[var(--text-secondary)]">
                             {order.paymentMethod || "COD"}
                           </span>
-                          <span className="font-moresugar font-bold text-sm text-[var(--text-brand)]">
-                            ₹{(order.pricing?.grandTotal || order.pricing?.subtotal || 0).toLocaleString("en-IN")}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-moresugar font-bold text-sm text-[var(--text-brand)]">
+                              ₹{(order.pricing?.grandTotal || order.pricing?.subtotal || 0).toLocaleString("en-IN")}
+                            </span>
+                            <span className="text-[10px] text-[var(--text-brand)] opacity-0 group-hover:opacity-100 transition-opacity">
+                              Receipt →
+                            </span>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -477,7 +522,289 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+
+        {/* Section: My Wishlist */}
+        <div className="mt-12 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-4">
+            <div>
+              <h3 className="font-moresugar font-bold text-xl text-[var(--text-primary)] flex items-center gap-2">
+                <Heart className="w-5 h-5 text-rose-500 fill-current" />
+                My Wishlist ({wishlistProducts.length})
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] mt-0.5 font-sans">
+                Items you&apos;ve saved to buy later
+              </p>
+            </div>
+
+            {wishlistProducts.length > 0 && (
+              <Link
+                href="/shop"
+                className="text-xs text-[var(--text-brand)] font-bold hover:underline font-moresugar"
+              >
+                Browse More Stationery →
+              </Link>
+            )}
+          </div>
+
+          {wishlistProducts.length === 0 ? (
+            <div className="py-12 text-center text-[var(--text-secondary)]">
+              <Heart className="w-10 h-10 mx-auto mb-2 opacity-30 text-rose-400" />
+              <p className="font-moresugar font-bold text-sm text-[var(--text-primary)]">
+                Your Wishlist is Empty
+              </p>
+              <p className="text-xs font-sans mt-0.5 mb-4">
+                Click the heart icon on any notebook or planner to save it here!
+              </p>
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] text-xs font-bold font-moresugar hover:scale-105 transition-all shadow-xs"
+              >
+                Explore Cute Stationery
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {wishlistProducts.map((product) => {
+                const hasImage = product.images && product.images.length > 0;
+                return (
+                  <div
+                    key={product.id}
+                    className="flex flex-col bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl p-3 justify-between space-y-3 hover:border-[var(--btn-shop)] transition-all group"
+                  >
+                    <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+                      <Link href={`/product/${product.id}`} className="block w-full h-full">
+                        {hasImage ? (
+                          <Image
+                            src={product.images[0]}
+                            alt={product.title}
+                            fill
+                            sizes="(max-width: 640px) 100vw, 25vw"
+                            className="object-cover group-hover:scale-105 transition-transform"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-3xl">🌸</div>
+                        )}
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleWishlist(product.id)}
+                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center shadow-xs cursor-pointer"
+                        title="Remove from Wishlist"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] block">
+                        {product.category?.replace(/-/g, " ")}
+                      </span>
+                      <Link href={`/product/${product.id}`}>
+                        <h4 className="font-bold text-xs text-[var(--text-primary)] truncate hover:text-[var(--text-brand)]">
+                          {product.title}
+                        </h4>
+                      </Link>
+                      <span className="font-moresugar font-bold text-sm text-[var(--text-brand)] block mt-1">
+                        ₹{Number(product.price || 0).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => addToCart(product, 1)}
+                      className="w-full py-2 rounded-xl bg-[var(--btn-shop)] text-[var(--btn-shop-text)] font-bold text-xs font-moresugar hover:bg-[var(--btn-shop-hover)] active:scale-95 transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <ShoppingBag className="w-3.5 h-3.5" />
+                      <span>Move to Bag</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </main>
+
+      {/* Order Receipt & Tracking Stepper Modal */}
+      {selectedOrderForModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            onClick={() => setSelectedOrderForModal(null)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+          />
+
+          <div className="relative w-full max-w-xl bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-[var(--border-color)] bg-[var(--bg-primary)] flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] font-sans">
+                  Order Details &amp; Receipt
+                </span>
+                <h3 className="font-moresugar font-bold text-lg text-[var(--text-brand)]">
+                  #{selectedOrderForModal.orderId || selectedOrderForModal.id.slice(0, 8)}
+                </h3>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedOrderForModal(null)}
+                className="p-1.5 rounded-full hover:bg-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Scrollable Content */}
+            <div className="p-5 overflow-y-auto space-y-6 no-scrollbar text-xs font-sans">
+              {/* Stepper Progress */}
+              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl p-4 space-y-3">
+                <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--text-secondary)] block">
+                  Delivery Status
+                </span>
+
+                {(() => {
+                  const steps = ["Placed", "Processing", "Shipped", "Delivered"];
+                  const currentStatus = selectedOrderForModal.orderStatus || "Placed";
+                  const currentIndex = steps.indexOf(currentStatus);
+
+                  return (
+                    <div className="grid grid-cols-4 gap-1 text-center relative">
+                      {steps.map((step, idx) => {
+                        const isDone = currentIndex >= idx;
+                        const isCurrent = currentIndex === idx;
+
+                        return (
+                          <div key={step} className="flex flex-col items-center space-y-1">
+                            <div
+                              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                                isDone
+                                  ? "bg-[var(--btn-shop)] text-[var(--btn-shop-text)] shadow-xs"
+                                  : "bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-secondary)]"
+                              }`}
+                            >
+                              {isDone ? "✓" : idx + 1}
+                            </div>
+                            <span
+                              className={`text-[10px] font-moresugar font-bold ${
+                                isCurrent
+                                  ? "text-[var(--text-brand)]"
+                                  : isDone
+                                  ? "text-[var(--text-primary)]"
+                                  : "text-[var(--text-secondary)]"
+                              }`}
+                            >
+                              {step}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Recipient Address */}
+              {selectedOrderForModal.customer?.address && (
+                <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl p-4 space-y-1.5">
+                  <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--text-secondary)] block">
+                    Shipping Address
+                  </span>
+                  <p className="font-bold text-sm text-[var(--text-primary)] font-moresugar">
+                    {selectedOrderForModal.customer.name}
+                  </p>
+                  <p className="text-[var(--text-secondary)] leading-relaxed">
+                    {selectedOrderForModal.customer.address.street},{" "}
+                    {selectedOrderForModal.customer.address.city},{" "}
+                    {selectedOrderForModal.customer.address.state} —{" "}
+                    <span className="font-mono font-bold text-[var(--text-primary)]">
+                      {selectedOrderForModal.customer.address.pincode}
+                    </span>
+                  </p>
+                  {selectedOrderForModal.customer.phone && (
+                    <p className="text-[var(--text-secondary)]">
+                      📞 {selectedOrderForModal.customer.phone}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Items Breakdown */}
+              <div className="space-y-2">
+                <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--text-secondary)] block">
+                  Items in Package ({selectedOrderForModal.items?.length || 0})
+                </span>
+
+                <div className="space-y-2">
+                  {selectedOrderForModal.items?.map((item: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 p-2 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)]"
+                    >
+                      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)] shrink-0">
+                        {item.image ? (
+                          <Image src={item.image} alt={item.title} fill sizes="40px" className="object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-sm">🌸</div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-xs text-[var(--text-primary)] truncate font-moresugar">
+                          {item.title}
+                        </p>
+                        <p className="text-[10px] text-[var(--text-secondary)] font-sans">
+                          Qty: {item.quantity} × ₹{Number(item.price || 0).toLocaleString("en-IN")}
+                        </p>
+                      </div>
+                      <span className="font-moresugar font-bold text-xs text-[var(--text-brand)]">
+                        ₹{(Number(item.price || 0) * item.quantity).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Calculation */}
+              <div className="pt-3 border-t border-[var(--border-color)] space-y-1.5">
+                <div className="flex items-center justify-between text-[var(--text-secondary)]">
+                  <span>Subtotal</span>
+                  <span>₹{Number(selectedOrderForModal.pricing?.subtotal || 0).toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex items-center justify-between text-[var(--text-secondary)]">
+                  <span>Shipping</span>
+                  <span>{selectedOrderForModal.pricing?.shippingFee === 0 ? "FREE" : `₹${selectedOrderForModal.pricing?.shippingFee}`}</span>
+                </div>
+                {selectedOrderForModal.pricing?.freeGiftUnlocked && (
+                  <div className="flex items-center justify-between text-pink-500 font-bold font-moresugar">
+                    <span>🌸 Free Kawaii Sticker Pack</span>
+                    <span>₹0</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between pt-2 border-t border-[var(--border-color)] text-sm font-bold">
+                  <span className="text-[var(--text-primary)]">Grand Total</span>
+                  <span className="font-moresugar text-lg text-[var(--text-brand)]">
+                    ₹{(selectedOrderForModal.pricing?.grandTotal || selectedOrderForModal.pricing?.subtotal || 0).toLocaleString("en-IN")}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-[var(--bg-secondary)] border-t border-[var(--border-color)] flex items-center justify-between">
+              <span className="text-[11px] text-[var(--text-secondary)]">
+                Payment: <strong>{selectedOrderForModal.paymentMethod === "COD" ? "Cash on Delivery" : "UPI Online"}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] text-xs font-bold font-moresugar hover:bg-[var(--border-color)] transition-all cursor-pointer"
+              >
+                <Printer className="w-3.5 h-3.5" /> Print Receipt
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

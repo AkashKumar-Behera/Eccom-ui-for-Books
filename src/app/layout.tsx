@@ -6,6 +6,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 
 const chewy = localFont({
@@ -48,8 +49,10 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
-              {children}
-              <CartDrawer />
+              <WishlistProvider>
+                {children}
+                <CartDrawer />
+              </WishlistProvider>
             </CartProvider>
           </AuthProvider>
         </ThemeProvider>
