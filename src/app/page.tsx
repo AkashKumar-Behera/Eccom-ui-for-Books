@@ -73,6 +73,36 @@ function HomeContent() {
     return () => clearInterval(interval);
   }, [banners.length, isPaused]);
 
+  // Touch swipe gesture handlers for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 40;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true);
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    setIsPaused(false);
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && banners.length > 1) {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    } else if (isRightSwipe && banners.length > 1) {
+      setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
+    }
+  };
+
   const searchParams = useSearchParams();
   const previewParam = searchParams.get("preview");
 
@@ -95,9 +125,12 @@ function HomeContent() {
 
       {/* 3rd Div: Hero Banner / Dynamic Carousel Section */}
       <section
-        className="group relative w-full aspect-[2078/757] overflow-hidden bg-zinc-900 select-none"
+        className="group relative w-full aspect-[2078/757] overflow-hidden bg-zinc-900 select-none touch-pan-y"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {banners.length === 0 ? (
           // Default Static Fallback Banner
@@ -149,10 +182,10 @@ function HomeContent() {
                     e.stopPropagation();
                     setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
                   }}
-                  className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg cursor-pointer"
+                  className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/75 text-white backdrop-blur-md flex items-center justify-center opacity-85 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg cursor-pointer active:scale-90"
                   aria-label="Previous Slide"
                 >
-                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6" />
                 </button>
 
                 <button
@@ -162,14 +195,14 @@ function HomeContent() {
                     e.stopPropagation();
                     setCurrentSlide((prev) => (prev + 1) % banners.length);
                   }}
-                  className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg cursor-pointer"
+                  className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/75 text-white backdrop-blur-md flex items-center justify-center opacity-85 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg cursor-pointer active:scale-90"
                   aria-label="Next Slide"
                 >
-                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6" />
                 </button>
 
                 {/* Pagination Dots */}
-                <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-2.5 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <div className="absolute bottom-2.5 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2.5 bg-black/30 backdrop-blur-md px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full">
                   {banners.map((_, idx) => (
                     <button
                       key={idx}
@@ -179,8 +212,8 @@ function HomeContent() {
                         e.stopPropagation();
                         setCurrentSlide(idx);
                       }}
-                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                        currentSlide === idx ? "w-6 bg-[var(--btn-shop)]" : "w-2 bg-white/50 hover:bg-white/80"
+                      className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                        currentSlide === idx ? "w-5 sm:w-6 bg-[var(--btn-shop)]" : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/80"
                       }`}
                       aria-label={`Go to slide ${idx + 1}`}
                     />
