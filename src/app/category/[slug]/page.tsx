@@ -248,7 +248,7 @@ export default function CategoryPage({
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
             {sortedProducts.map((product) => {
               const hasImage = product.images && product.images.length > 0;
               const isOutOfStock = (product.stock || 0) <= 0;
@@ -256,7 +256,7 @@ export default function CategoryPage({
               return (
                 <div
                   key={product.id}
-                  className="group flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl overflow-hidden shadow-2xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  className="group flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Product Image */}
                   <Link
@@ -268,65 +268,66 @@ export default function CategoryPage({
                         src={product.images[0]}
                         alt={product.title}
                         fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl">
+                      <div className="w-full h-full flex items-center justify-center text-3xl sm:text-4xl">
                         {meta.icon}
                       </div>
                     )}
 
                     {/* Stock Status Badge */}
                     {isOutOfStock ? (
-                      <span className="absolute top-3 left-3 bg-red-500/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-xs font-moresugar">
+                      <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-red-500/90 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full uppercase tracking-wider backdrop-blur-xs font-moresugar">
                         Sold Out
                       </span>
                     ) : (
-                      <span className="absolute top-3 left-3 bg-[var(--btn-shop)]/90 text-[var(--btn-shop-text)] text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-xs font-moresugar">
+                      <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[var(--btn-shop)]/90 text-[var(--btn-shop-text)] text-[9px] sm:text-[10px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full uppercase tracking-wider backdrop-blur-xs font-moresugar">
                         In Stock
                       </span>
                     )}
                   </Link>
 
                   {/* Product Content */}
-                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+                  <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
                     <div>
-                      <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block mb-1">
+                      <span className="text-[9px] sm:text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block mb-0.5 sm:mb-1">
                         {meta.title}
                       </span>
                       <Link href={`/product/${product.id}`}>
-                        <h4 className="font-bold text-sm sm:text-base text-[var(--text-primary)] line-clamp-2 hover:text-[var(--text-brand)] transition-colors font-sans">
+                        <h4 className="font-bold text-xs sm:text-base text-[var(--text-primary)] line-clamp-2 leading-tight hover:text-[var(--text-brand)] transition-colors font-sans">
                           {product.title}
                         </h4>
                       </Link>
                     </div>
 
-                    <div className="pt-2 border-t border-[var(--border-color)] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs text-[var(--text-secondary)] block text-[10px]">
+                    <div className="pt-1.5 sm:pt-2 border-t border-[var(--border-color)] flex items-center justify-between gap-1">
+                      <div className="min-w-0">
+                        <span className="text-[9px] sm:text-[10px] text-[var(--text-secondary)] block">
                           Price
                         </span>
-                        <span className="font-moresugar font-bold text-lg sm:text-xl text-[var(--text-brand)]">
+                        <span className="font-moresugar font-bold text-xs sm:text-xl text-[var(--text-brand)] truncate block">
                           ₹{Number(product.price || 0).toLocaleString("en-IN")}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1 shrink-0">
                         <Link
                           href={`/product/${product.id}`}
-                          className="w-8 h-8 rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center hover:bg-[var(--border-color)] transition-all"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center hover:bg-[var(--border-color)] transition-all"
                           title="View Details"
                         >
-                          <Eye className="w-3.5 h-3.5" />
+                          <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </Link>
                         <button
                           type="button"
                           onClick={() => addToCart(product, 1)}
                           disabled={isOutOfStock}
-                          className="w-8 h-8 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xs disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xs disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
                           title="Add to Bag"
                         >
-                          <ShoppingBag className="w-3.5 h-3.5" />
+                          <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </button>
                       </div>
                     </div>

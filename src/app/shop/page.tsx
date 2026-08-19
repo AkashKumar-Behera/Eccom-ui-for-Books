@@ -117,22 +117,22 @@ function ShopContent() {
     <div className="min-h-screen flex flex-col font-sans bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-3 sm:px-8 py-6 sm:py-12">
         {/* Header Title */}
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-moresugar bg-[var(--btn-shop)]/25 text-[var(--text-brand)]">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 space-y-1.5">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold font-moresugar bg-[var(--btn-shop)]/25 text-[var(--text-brand)]">
             <Sparkles className="w-3.5 h-3.5" /> All Stationery Collections
           </span>
-          <h1 className="font-moresugar font-bold text-3xl sm:text-5xl text-[var(--text-brand)] tracking-wide">
+          <h1 className="font-moresugar font-bold text-2xl sm:text-4xl md:text-5xl text-[var(--text-brand)] tracking-wide">
             Explore The Shop
           </h1>
-          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans">
+          <p className="text-xs sm:text-base text-[var(--text-secondary)] font-sans">
             Handmade with love, aesthetic pastel designs, and premium paper quality.
           </p>
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 no-scrollbar">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2.5 mb-5 sm:mb-8 no-scrollbar">
           {CATEGORY_FILTERS.map((cat) => {
             const isActive = selectedCategory === cat.id;
             return (
@@ -140,7 +140,7 @@ function ShopContent() {
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs font-bold font-moresugar whitespace-nowrap transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold font-moresugar whitespace-nowrap transition-all cursor-pointer ${
                   isActive
                     ? "bg-[var(--btn-shop)] text-[var(--btn-shop-text)] shadow-xs scale-105"
                     : "bg-[var(--card-bg)] text-[var(--text-secondary)] hover:text-[var(--text-brand)] border border-[var(--border-color)]"
@@ -153,21 +153,21 @@ function ShopContent() {
         </div>
 
         {/* Toolbar: Search, Sort & Counter */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-[var(--border-color)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 sm:mb-8 pb-3 sm:pb-4 border-b border-[var(--border-color)]">
           {/* Search Box */}
           <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
+            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-full pl-9 pr-4 py-2 text-xs font-sans text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-[var(--btn-shop)]"
+              className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-full pl-9 pr-4 py-1.5 sm:py-2 text-xs font-sans text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-[var(--btn-shop)]"
             />
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
-            <span className="text-xs font-semibold text-[var(--text-secondary)] font-sans">
+          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+            <span className="text-[11px] sm:text-xs font-semibold text-[var(--text-secondary)] font-sans">
               {filteredProducts.length} Product{filteredProducts.length !== 1 ? "s" : ""}
             </span>
 
@@ -175,7 +175,7 @@ function ShopContent() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-[var(--card-bg)] border border-[var(--border-color)] text-xs font-semibold text-[var(--text-primary)] rounded-full px-3.5 py-2 focus:outline-none focus:border-[var(--btn-shop)] cursor-pointer"
+                className="bg-[var(--card-bg)] border border-[var(--border-color)] text-[11px] sm:text-xs font-semibold text-[var(--text-primary)] rounded-full px-3 py-1.5 sm:py-2 focus:outline-none focus:border-[var(--btn-shop)] cursor-pointer"
               >
                 <option value="featured">Featured / Latest</option>
                 <option value="price-low">Price: Low to High</option>
@@ -192,11 +192,11 @@ function ShopContent() {
             <p className="font-moresugar text-base">Loading products...</p>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="py-20 text-center rounded-3xl border border-dashed border-[var(--border-color)] bg-[var(--card-bg)]/40 p-8 max-w-lg mx-auto">
-            <div className="w-16 h-16 rounded-full bg-[var(--btn-shop)]/20 text-[var(--text-brand)] flex items-center justify-center mx-auto mb-4">
-              <PackageOpen className="w-8 h-8" />
+          <div className="py-16 text-center rounded-3xl border border-dashed border-[var(--border-color)] bg-[var(--card-bg)]/40 p-6 sm:p-8 max-w-lg mx-auto">
+            <div className="w-14 h-14 rounded-full bg-[var(--btn-shop)]/20 text-[var(--text-brand)] flex items-center justify-center mx-auto mb-3">
+              <PackageOpen className="w-7 h-7" />
             </div>
-            <h3 className="font-moresugar font-bold text-xl text-[var(--text-primary)] mb-2">
+            <h3 className="font-moresugar font-bold text-lg sm:text-xl text-[var(--text-primary)] mb-1">
               No Products Found
             </h3>
             <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-4">
@@ -218,7 +218,7 @@ function ShopContent() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
             {filteredProducts.map((product) => {
               const hasImage = product.images && product.images.length > 0;
               const isOutOfStock = (product.stock || 0) <= 0;
@@ -226,7 +226,7 @@ function ShopContent() {
               return (
                 <div
                   key={product.id}
-                  className="group flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl overflow-hidden shadow-2xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  className="group flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Image */}
                   <Link
@@ -238,60 +238,61 @@ function ShopContent() {
                         src={product.images[0]}
                         alt={product.title}
                         fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl">
+                      <div className="w-full h-full flex items-center justify-center text-3xl sm:text-4xl">
                         🌸
                       </div>
                     )}
 
                     {isOutOfStock && (
-                      <span className="absolute top-3 left-3 bg-red-500/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-xs font-moresugar">
+                      <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-red-500/90 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full uppercase tracking-wider backdrop-blur-xs font-moresugar">
                         Sold Out
                       </span>
                     )}
                   </Link>
 
                   {/* Info */}
-                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+                  <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
                     <div>
-                      <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block mb-1">
+                      <span className="text-[9px] sm:text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block mb-0.5 sm:mb-1">
                         {product.category?.replace(/-/g, " ")}
                       </span>
                       <Link href={`/product/${product.id}`}>
-                        <h4 className="font-bold text-sm sm:text-base text-[var(--text-primary)] line-clamp-2 hover:text-[var(--text-brand)] transition-colors font-sans">
+                        <h4 className="font-bold text-xs sm:text-base text-[var(--text-primary)] line-clamp-2 leading-tight hover:text-[var(--text-brand)] transition-colors font-sans">
                           {product.title}
                         </h4>
                       </Link>
                     </div>
 
-                    <div className="pt-2 border-t border-[var(--border-color)] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs text-[var(--text-secondary)] block text-[10px]">
+                    <div className="pt-1.5 sm:pt-2 border-t border-[var(--border-color)] flex items-center justify-between gap-1">
+                      <div className="min-w-0">
+                        <span className="text-[9px] sm:text-[10px] text-[var(--text-secondary)] block">
                           Price
                         </span>
-                        <span className="font-moresugar font-bold text-lg sm:text-xl text-[var(--text-brand)]">
+                        <span className="font-moresugar font-bold text-xs sm:text-xl text-[var(--text-brand)] truncate block">
                           ₹{Number(product.price || 0).toLocaleString("en-IN")}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1 shrink-0">
                         <Link
                           href={`/product/${product.id}`}
-                          className="w-8 h-8 rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center hover:bg-[var(--border-color)] transition-all"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center hover:bg-[var(--border-color)] transition-all"
                           title="View Details"
                         >
-                          <Eye className="w-3.5 h-3.5" />
+                          <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </Link>
                         <button
                           type="button"
                           onClick={() => addToCart(product, 1)}
                           disabled={isOutOfStock}
-                          className="w-8 h-8 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xs disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xs disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
                           title="Add to Bag"
                         >
-                          <ShoppingBag className="w-3.5 h-3.5" />
+                          <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </button>
                       </div>
                     </div>

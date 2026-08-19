@@ -73,9 +73,9 @@ export default function Navbar() {
 
       {/* Main Header */}
       <header className="w-full border-b border-[var(--border-color)] bg-[var(--bg-primary)] sticky top-0 z-40 transition-colors shadow-2xs backdrop-blur-md">
-        <div className="w-full px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
+        <div className="w-full px-2.5 sm:px-8 h-14 sm:h-20 flex items-center justify-between gap-2">
           {/* Left Menu / Navigation Links */}
-          <div className="flex-1 flex items-center justify-start">
+          <div className="flex-1 lg:flex-1 flex items-center justify-start min-w-0">
             <nav className="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-semibold tracking-wider text-[var(--text-secondary)] font-moresugar">
               {/* SHOP Dropdown */}
               <div
@@ -160,28 +160,28 @@ export default function Navbar() {
             </nav>
 
             {/* Mobile Hamburger Button */}
-            <div className="flex lg:hidden items-center gap-3">
+            <div className="flex lg:hidden items-center">
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="p-2 -ml-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors cursor-pointer"
+                className="p-1.5 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors cursor-pointer"
                 aria-label="Open menu"
               >
-                <Menu className="w-6 h-6" />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
           </div>
 
           {/* Center Brand Name */}
-          <div className="flex-shrink-0 flex items-center justify-center">
-            <Link href="/" className="group flex items-center gap-2">
-              <span className="font-moresugar font-bold text-2xl sm:text-3xl text-[var(--text-brand)] tracking-wide group-hover:scale-105 transition-transform drop-shadow-2xs">
+          <div className="flex-initial flex items-center justify-center min-w-0 px-1">
+            <Link href="/" className="group flex items-center gap-1.5 min-w-0">
+              <span className="font-moresugar font-bold text-lg sm:text-2xl md:text-3xl text-[var(--text-brand)] tracking-tight sm:tracking-wide group-hover:scale-105 transition-transform drop-shadow-2xs truncate">
                 The Abbie Store
               </span>
             </Link>
           </div>
 
           {/* Right Action Icons */}
-          <div className="flex-1 flex items-center justify-end gap-2 sm:gap-4">
+          <div className="flex-1 lg:flex-1 flex items-center justify-end gap-1 sm:gap-3">
             {/* Theme Toggle (Desktop Only - >=950px) */}
             <div className="hidden min-[950px]:block">
               <ThemeToggle />
@@ -189,19 +189,19 @@ export default function Navbar() {
 
             <Link
               href="/shop"
-              className="p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors"
+              className="p-1.5 sm:p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors"
               aria-label="Search"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
             </Link>
 
             {user ? (
               <Link
                 href="/profile"
-                className="flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-1.5 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-all font-moresugar text-xs font-bold"
+                className="flex items-center gap-1.5 p-1 sm:px-3 sm:py-1.5 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-all font-moresugar text-xs font-bold"
                 title="My Profile & Orders"
               >
-                <User className="w-5 h-5 text-[var(--text-brand)]" />
+                <User className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[var(--text-brand)]" />
                 <span className="hidden sm:inline-block max-w-[90px] truncate">
                   {user.displayName || user.email?.split("@")[0] || "Account"}
                 </span>
@@ -209,22 +209,22 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => setIsAuthOpen(true)}
-                className="p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors cursor-pointer"
                 aria-label="Sign in"
               >
-                <User className="w-5 h-5" />
+                <User className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               </button>
             )}
 
             <button
               type="button"
               onClick={openCart}
-              className="p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors relative cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors relative cursor-pointer"
               aria-label="Shopping Cart"
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingCart className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[var(--text-brand)] text-[var(--bg-primary)] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans animate-in zoom-in-50 duration-200">
+                <span className="absolute -top-1 -right-1 bg-[var(--text-brand)] text-[var(--bg-primary)] text-[9px] sm:text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans animate-in zoom-in-50 duration-200">
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}

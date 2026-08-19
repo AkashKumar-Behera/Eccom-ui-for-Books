@@ -312,10 +312,10 @@ export default function CheckoutPage() {
     <div className="min-h-screen flex flex-col font-sans bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-3 sm:px-8 py-6 sm:py-12">
         {/* Header Breadcrumb */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-color)]">
-          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] font-sans">
+        <div className="flex items-center justify-between mb-6 pb-3 border-b border-[var(--border-color)]">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-[var(--text-secondary)] font-sans">
             <Link href="/shop" className="hover:text-[var(--text-brand)] transition-colors flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" /> Continue Shopping
             </Link>
@@ -327,25 +327,25 @@ export default function CheckoutPage() {
             <button
               type="button"
               onClick={() => setIsAuthOpen(true)}
-              className="text-xs text-[var(--text-brand)] font-bold hover:underline font-moresugar cursor-pointer flex items-center gap-1"
+              className="text-[11px] sm:text-xs text-[var(--text-brand)] font-bold hover:underline font-moresugar cursor-pointer flex items-center gap-1"
             >
               <User className="w-3.5 h-3.5" /> Have an account? Sign In
             </button>
           )}
         </div>
 
-        <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12">
           {/* Left Column (7 cols): Shipping Address & Payment */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6">
             {/* Step 1: Delivery Address */}
-            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 shadow-sm space-y-5">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm space-y-4 sm:space-y-5">
               <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
-                <h2 className="font-moresugar font-bold text-lg text-[var(--text-primary)] flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-[var(--text-brand)]" />
+                <h2 className="font-moresugar font-bold text-base sm:text-lg text-[var(--text-primary)] flex items-center gap-2">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--text-brand)]" />
                   1. Delivery Details
                 </h2>
                 {user && (
-                  <span className="text-[11px] text-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 rounded-full font-moresugar font-bold">
+                  <span className="text-[10px] sm:text-[11px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full font-moresugar font-bold">
                     Profile Linked
                   </span>
                 )}
@@ -553,7 +553,7 @@ export default function CheckoutPage() {
                   <div key={item.id} className="flex items-center gap-3">
                     <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)] shrink-0">
                       {item.image ? (
-                        <Image src={item.image} alt={item.title} fill className="object-cover" />
+                        <Image src={item.image} alt={item.title} fill sizes="48px" className="object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-lg">🌸</div>
                       )}
