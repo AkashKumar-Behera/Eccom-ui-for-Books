@@ -129,6 +129,7 @@ function HomeContent() {
                         src={banner.imageUrl}
                         alt={banner.title || `Store Banner Slide ${index + 1}`}
                         fill
+                        sizes="100vw"
                         priority={index === 0}
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />

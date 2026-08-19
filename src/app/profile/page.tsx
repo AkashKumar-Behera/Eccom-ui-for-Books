@@ -572,7 +572,7 @@ export default function ProfilePage() {
                     className="flex flex-col bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl p-3 justify-between space-y-3 hover:border-[var(--btn-shop)] transition-all group"
                   >
                     <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)]">
-                      <Link href={`/product/${product.id}`} className="block w-full h-full">
+                      <Link href={`/product/${product.id}`} className="block w-full h-full relative">
                         {hasImage ? (
                           <Image
                             src={product.images[0]}

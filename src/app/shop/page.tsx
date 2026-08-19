@@ -238,7 +238,7 @@ function ShopContent() {
                 >
                   {/* Image */}
                   <div className="relative aspect-square w-full bg-[var(--bg-secondary)] overflow-hidden block">
-                    <Link href={`/product/${product.id}`} className="block w-full h-full">
+                    <Link href={`/product/${product.id}`} className="block w-full h-full relative">
                       {hasImage ? (
                         <Image
                           src={product.images[0]}

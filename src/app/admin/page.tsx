@@ -1297,6 +1297,7 @@ export default function AdminPage() {
                             src={previewUrl}
                             alt={`Preview ${idx + 1}`}
                             fill
+                            sizes="120px"
                             className="object-cover"
                           />
                           <button
@@ -1448,6 +1449,7 @@ export default function AdminPage() {
                                       src={p.images[0]}
                                       alt={p.title}
                                       fill
+                                      sizes="48px"
                                       className="object-cover"
                                     />
                                   ) : (
@@ -1622,7 +1624,7 @@ export default function AdminPage() {
                     />
                     {bannerPreview ? (
                       <div className="relative aspect-[2078/757] w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-white/20">
-                        <Image src={bannerPreview} alt="Banner Preview" fill className="object-cover" />
+                        <Image src={bannerPreview} alt="Banner Preview" fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           <span className="bg-[#98C4C5] text-[#121c1d] px-4 py-2 rounded-full font-bold text-xs font-moresugar shadow-md">
                             Change Banner Image
@@ -1704,7 +1706,7 @@ export default function AdminPage() {
                       className="bg-[#0d1314] border border-white/10 rounded-2xl overflow-hidden group hover:border-[#98C4C5]/40 transition-all p-3 space-y-3"
                     >
                       <div className="relative aspect-[2078/757] w-full rounded-xl overflow-hidden bg-zinc-900 border border-white/10">
-                        <Image src={banner.imageUrl} alt={banner.title || `Banner ${index + 1}`} fill className="object-cover" />
+                        <Image src={banner.imageUrl} alt={banner.title || `Banner ${index + 1}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                         <span className="absolute top-2 left-2 bg-black/60 text-[#98C4C5] font-bold text-[10px] font-moresugar px-2 py-0.5 rounded-md backdrop-blur-xs">
                           Slide #{index + 1}
                         </span>
