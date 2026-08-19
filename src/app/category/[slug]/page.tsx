@@ -7,6 +7,7 @@ import { collection, query, where, onSnapshot, getDocs } from "firebase/firestor
 import { db } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CustomSelect from "@/components/CustomSelect";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import {
@@ -209,19 +210,24 @@ export default function CategoryPage({
             item{products.length !== 1 ? "s" : ""}
           </p>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold text-[var(--text-secondary)] font-sans">
+          <div className="flex items-center justify-between sm:justify-end gap-3.5 w-full sm:w-auto">
+            <span className="text-xs font-semibold text-[var(--text-secondary)] font-sans whitespace-nowrap">
               Sort by:
             </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="bg-[var(--card-bg)] border border-[var(--border-color)] text-xs font-semibold text-[var(--text-primary)] rounded-full px-3.5 py-2 focus:outline-none focus:border-[var(--btn-shop)] cursor-pointer"
-            >
-              <option value="featured">Featured / Latest</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
+            <div className="w-44 sm:w-48 shrink-0">
+              <CustomSelect
+                size="sm"
+                variant="store"
+                options={[
+                  { id: "featured", name: "Featured / Latest" },
+                  { id: "price-low", name: "Price: Low to High" },
+                  { id: "price-high", name: "Price: High to Low" },
+                ]}
+                value={sortBy}
+                onChange={(val) => setSortBy(val as any)}
+                placeholder="Sort by..."
+              />
+            </div>
           </div>
         </div>
 

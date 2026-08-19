@@ -8,6 +8,7 @@ import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Navbar, { SHOP_CATEGORIES } from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CustomSelect from "@/components/CustomSelect";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import {
@@ -169,21 +170,24 @@ function ShopContent() {
             />
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-            <span className="text-[11px] sm:text-xs font-semibold text-[var(--text-secondary)] font-sans">
-              {filteredProducts.length} Product{filteredProducts.length !== 1 ? "s" : ""}
+          <div className="flex items-center justify-between sm:justify-end gap-3.5 w-full sm:w-auto">
+            <span className="text-[11px] sm:text-xs font-semibold text-[var(--text-secondary)] font-sans whitespace-nowrap">
+              {filteredProducts.length} {filteredProducts.length === 1 ? "Product" : "Products"}
             </span>
 
-            <div className="flex items-center gap-2">
-              <select
+            <div className="w-44 sm:w-48 shrink-0">
+              <CustomSelect
+                size="sm"
+                variant="store"
+                options={[
+                  { id: "featured", name: "Featured / Latest" },
+                  { id: "price-low", name: "Price: Low to High" },
+                  { id: "price-high", name: "Price: High to Low" },
+                ]}
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-[var(--card-bg)] border border-[var(--border-color)] text-[11px] sm:text-xs font-semibold text-[var(--text-primary)] rounded-full px-3 py-1.5 sm:py-2 focus:outline-none focus:border-[var(--btn-shop)] cursor-pointer"
-              >
-                <option value="featured">Featured / Latest</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
+                onChange={(val) => setSortBy(val as any)}
+                placeholder="Sort by..."
+              />
             </div>
           </div>
         </div>
