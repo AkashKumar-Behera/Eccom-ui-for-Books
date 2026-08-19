@@ -7,6 +7,7 @@ import { ref, get } from "firebase/database";
 import {
   collection,
   addDoc,
+  updateDoc,
   deleteDoc,
   doc,
   onSnapshot,
@@ -41,6 +42,13 @@ import {
   Menu,
   SlidersHorizontal,
   ExternalLink,
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  CheckCircle,
+  Truck,
+  IndianRupee,
 } from "lucide-react";
 import Image from "next/image";
 import CustomSelect from "@/components/CustomSelect";
@@ -61,6 +69,44 @@ interface Banner {
   imageUrl: string;
   title?: string;
   link?: string;
+  createdAt?: any;
+}
+
+interface OrderItem {
+  id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image?: string;
+  category?: string;
+}
+
+interface Order {
+  id: string;
+  orderId?: string;
+  userId?: string;
+  customer: {
+    name: string;
+    email?: string;
+    phone: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      pincode: string;
+    };
+    notes?: string;
+  };
+  items: OrderItem[];
+  pricing: {
+    subtotal: number;
+    shippingFee: number;
+    grandTotal: number;
+    freeGiftUnlocked?: boolean;
+  };
+  paymentMethod: string;
+  paymentStatus: string;
+  orderStatus: "Placed" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
   createdAt?: any;
 }
 
@@ -114,6 +160,14 @@ export default function AdminPage() {
   const [isSubmittingBanner, setIsSubmittingBanner] = useState(false);
   const [bannerFeedback, setBannerFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [deletingBannerId, setDeletingBannerId] = useState<string | null>(null);
+
+  // Orders State
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+  const [orderSearch, setOrderSearch] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
+  const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const bannerFileInputRef = useRef<HTMLInputElement>(null);
@@ -215,6 +269,44 @@ export default function AdminPage() {
     } catch (err) {
       console.error("Error setting up banners listener:", err);
       setLoadingBanners(false);
+    }
+  }, [isAdminAuthorized]);
+
+  // 4. Fetch Orders in Real-Time
+  useEffect(() => {
+    if (!isAdminAuthorized) return;
+
+    try {
+      const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const items: Order[] = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data(),
+          })) as Order[];
+          setOrders(items);
+          setLoadingOrders(false);
+        },
+        (error) => {
+          console.warn("Orders fallback listener:", error);
+          const fallbackUnsub = onSnapshot(collection(db, "orders"), (snapshot) => {
+            const items: Order[] = snapshot.docs.map((docSnap) => ({
+              id: docSnap.id,
+              ...docSnap.data(),
+            })) as Order[];
+            items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            setOrders(items);
+            setLoadingOrders(false);
+          });
+          return () => fallbackUnsub();
+        }
+      );
+
+      return () => unsubscribe();
+    } catch (err) {
+      console.error("Error setting up orders listener:", err);
+      setLoadingOrders(false);
     }
   }, [isAdminAuthorized]);
 
@@ -408,9 +500,54 @@ export default function AdminPage() {
     }
   };
 
+  // Update Order Status handler
+  const handleUpdateOrderStatus = async (orderDocId: string, newStatus: string) => {
+    setUpdatingOrderId(orderDocId);
+    try {
+      await updateDoc(doc(db, "orders", orderDocId), {
+        orderStatus: newStatus,
+        updatedAt: serverTimestamp(),
+      });
+    } catch (err: any) {
+      alert(`Could not update order status: ${err.message}`);
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
+
+  // Delete / Archive Order
+  const handleDeleteOrder = async (orderDocId: string) => {
+    if (!confirm("Are you sure you want to permanently delete this order record?")) return;
+    setDeletingOrderId(orderDocId);
+    try {
+      await deleteDoc(doc(db, "orders", orderDocId));
+    } catch (err: any) {
+      alert(`Could not delete order: ${err.message}`);
+    } finally {
+      setDeletingOrderId(null);
+    }
+  };
+
   // Calculations
   const totalStockItems = products.reduce((acc, p) => acc + (p.stock || 0), 0);
   const totalInventoryValue = products.reduce((acc, p) => acc + (p.price || 0) * (p.stock || 0), 0);
+  const totalRevenue = orders.reduce((acc, o) => acc + (o.pricing?.grandTotal || o.pricing?.subtotal || 0), 0);
+  const pendingOrdersCount = orders.filter((o) => o.orderStatus === "Placed" || o.orderStatus === "Processing").length;
+
+  // Filtered Orders
+  const filteredOrders = orders.filter((o) => {
+    const q = orderSearch.toLowerCase();
+    const matchesSearch =
+      !q ||
+      o.orderId?.toLowerCase().includes(q) ||
+      o.customer?.name?.toLowerCase().includes(q) ||
+      o.customer?.phone?.toLowerCase().includes(q) ||
+      o.customer?.email?.toLowerCase().includes(q) ||
+      o.customer?.address?.city?.toLowerCase().includes(q);
+
+    const matchesStatus = orderStatusFilter === "all" || o.orderStatus === orderStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   // Filtered Products
   const filteredProducts = products.filter((p) => {
@@ -495,14 +632,25 @@ export default function AdminPage() {
           setActiveTab("orders");
           setIsMobileSidebarOpen(false);
         }}
-        className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition-all cursor-pointer ${
+        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-semibold transition-all cursor-pointer ${
           activeTab === "orders"
             ? "bg-[#98C4C5] text-[#121c1d] shadow-lg shadow-[#98C4C5]/20 font-bold"
             : "text-zinc-400 hover:text-white hover:bg-white/5"
         }`}
       >
-        <ShoppingCart className="w-5 h-5 shrink-0" />
-        Orders & Shipping
+        <div className="flex items-center gap-3">
+          <ShoppingCart className="w-5 h-5 shrink-0" />
+          <span>Orders</span>
+        </div>
+        {pendingOrdersCount > 0 && (
+          <span
+            className={`text-xs px-2 py-0.5 rounded-full font-sans font-bold ${
+              activeTab === "orders" ? "bg-[#121c1d] text-[#98C4C5]" : "bg-amber-500 text-black"
+            }`}
+          >
+            {pendingOrdersCount}
+          </span>
+        )}
       </button>
 
       <button
@@ -661,6 +809,40 @@ export default function AdminPage() {
             <div className="bg-[#121c1d]/80 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:border-[#98C4C5]/40 transition-all group">
               <div className="flex items-center justify-between">
                 <p className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+                  Total Orders
+                </p>
+                <div className="w-7 h-7 sm:w-8 h-8 rounded-lg sm:rounded-xl bg-[#98C4C5]/15 flex items-center justify-center text-[#98C4C5]">
+                  <ShoppingCart className="w-3.5 h-3.5 sm:w-4 h-4" />
+                </div>
+              </div>
+              <h3 className="text-xl sm:text-3xl font-bold text-white mt-1.5 sm:mt-2 font-moresugar">
+                {orders.length}
+              </h3>
+              <span className="inline-flex items-center gap-1 mt-1.5 sm:mt-2 text-[9px] sm:text-[11px] text-amber-400 bg-amber-950/50 px-2 py-0.5 rounded-full font-medium">
+                {pendingOrdersCount} Pending
+              </span>
+            </div>
+
+            <div className="bg-[#121c1d]/80 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:border-[#98C4C5]/40 transition-all group">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+                  Total Revenue
+                </p>
+                <div className="w-7 h-7 sm:w-8 h-8 rounded-lg sm:rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 font-bold text-xs sm:text-sm">
+                  ₹
+                </div>
+              </div>
+              <h3 className="text-xl sm:text-3xl font-bold text-white mt-1.5 sm:mt-2 font-moresugar truncate">
+                ₹{totalRevenue.toLocaleString("en-IN")}
+              </h3>
+              <span className="inline-block mt-1.5 sm:mt-2 text-[9px] sm:text-[11px] text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded-full font-medium">
+                Lifetime Sales
+              </span>
+            </div>
+
+            <div className="bg-[#121c1d]/80 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:border-[#98C4C5]/40 transition-all group">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
                   Listed Products
                 </p>
                 <div className="w-7 h-7 sm:w-8 h-8 rounded-lg sm:rounded-xl bg-[#98C4C5]/15 flex items-center justify-center text-[#98C4C5]">
@@ -670,42 +852,8 @@ export default function AdminPage() {
               <h3 className="text-xl sm:text-3xl font-bold text-white mt-1.5 sm:mt-2 font-moresugar">
                 {products.length}
               </h3>
-              <span className="inline-flex items-center gap-1 mt-1.5 sm:mt-2 text-[9px] sm:text-[11px] text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded-full font-medium">
-                <TrendingUp className="w-2.5 h-2.5 sm:w-3 h-3" /> Live
-              </span>
-            </div>
-
-            <div className="bg-[#121c1d]/80 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:border-[#98C4C5]/40 transition-all group">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
-                  Total Stock
-                </p>
-                <div className="w-7 h-7 sm:w-8 h-8 rounded-lg sm:rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-400">
-                  <Boxes className="w-3.5 h-3.5 sm:w-4 h-4" />
-                </div>
-              </div>
-              <h3 className="text-xl sm:text-3xl font-bold text-white mt-1.5 sm:mt-2 font-moresugar">
-                {totalStockItems}
-              </h3>
-              <span className="inline-block mt-1.5 sm:mt-2 text-[9px] sm:text-[11px] text-amber-400 bg-amber-950/50 px-2 py-0.5 rounded-full font-medium">
-                Units
-              </span>
-            </div>
-
-            <div className="bg-[#121c1d]/80 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:border-[#98C4C5]/40 transition-all group">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
-                  Inventory Value
-                </p>
-                <div className="w-7 h-7 sm:w-8 h-8 rounded-lg sm:rounded-xl bg-[#98C4C5]/15 flex items-center justify-center text-[#98C4C5] font-bold text-xs sm:text-sm">
-                  ₹
-                </div>
-              </div>
-              <h3 className="text-xl sm:text-3xl font-bold text-white mt-1.5 sm:mt-2 font-moresugar truncate">
-                ₹{totalInventoryValue.toLocaleString("en-IN")}
-              </h3>
               <span className="inline-block mt-1.5 sm:mt-2 text-[9px] sm:text-[11px] text-[#98C4C5] bg-[#98C4C5]/10 px-2 py-0.5 rounded-full font-medium">
-                Retail
+                {totalStockItems} Total Units
               </span>
             </div>
 
@@ -1333,25 +1481,327 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Tab 4: Orders Placeholder */}
+        {/* Tab 4: Orders & Shipments Management */}
         {activeTab === "orders" && (
-          <div className="bg-[#121c1d]/90 border border-white/10 rounded-3xl p-12 text-center">
-            <ShoppingCart className="w-12 h-12 text-[#98C4C5] mx-auto mb-3" />
-            <h3 className="text-xl font-bold text-white font-moresugar">Orders Tracker</h3>
-            <p className="text-sm text-zinc-400 mt-1 max-w-md mx-auto">
-              Customer checkout and order receipts will be logged here in real-time.
-            </p>
+          <div className="space-y-6">
+            {/* Orders Toolbar */}
+            <div className="bg-[#121c1d]/90 border border-white/10 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white font-moresugar flex items-center gap-2">
+                    <ShoppingCart className="w-5 h-5 text-[#98C4C5]" />
+                    Customer Orders ({filteredOrders.length})
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    Track shipments, customer details, and update live order fulfillment.
+                  </p>
+                </div>
+
+                {/* Search Box */}
+                <div className="relative w-full sm:w-72">
+                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                  <input
+                    type="text"
+                    value={orderSearch}
+                    onChange={(e) => setOrderSearch(e.target.value)}
+                    placeholder="Search by Order ID, name, phone..."
+                    className="w-full bg-[#0d1314] border border-white/15 rounded-full pl-9 pr-4 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#98C4C5]"
+                  />
+                </div>
+              </div>
+
+              {/* Status Filter Pills */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar pt-2 border-t border-white/10">
+                {[
+                  { id: "all", label: `All (${orders.length})` },
+                  { id: "Placed", label: `Placed (${orders.filter((o) => o.orderStatus === "Placed").length})` },
+                  { id: "Processing", label: `Processing (${orders.filter((o) => o.orderStatus === "Processing").length})` },
+                  { id: "Shipped", label: `Shipped (${orders.filter((o) => o.orderStatus === "Shipped").length})` },
+                  { id: "Delivered", label: `Delivered (${orders.filter((o) => o.orderStatus === "Delivered").length})` },
+                  { id: "Cancelled", label: `Cancelled (${orders.filter((o) => o.orderStatus === "Cancelled").length})` },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setOrderStatusFilter(tab.id)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold font-moresugar whitespace-nowrap transition-all cursor-pointer ${
+                      orderStatusFilter === tab.id
+                        ? "bg-[#98C4C5] text-[#121c1d] shadow-sm"
+                        : "bg-white/5 text-zinc-400 hover:text-white border border-white/10"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Orders Feed */}
+            {loadingOrders ? (
+              <div className="py-20 text-center text-zinc-400">
+                <Loader2 className="w-8 h-8 animate-spin text-[#98C4C5] mx-auto mb-3" />
+                <p className="font-moresugar text-sm">Loading customer orders...</p>
+              </div>
+            ) : filteredOrders.length === 0 ? (
+              <div className="py-16 text-center border border-dashed border-white/10 rounded-3xl bg-[#121c1d]/40 p-8 max-w-md mx-auto">
+                <ShoppingCart className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+                <h4 className="font-moresugar font-bold text-base text-white">No Orders Found</h4>
+                <p className="text-xs text-zinc-400 mt-1">
+                  {orderSearch
+                    ? `No orders matching "${orderSearch}".`
+                    : "No orders placed in this status category yet."}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredOrders.map((order) => {
+                  const statusColors: Record<string, string> = {
+                    Placed: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+                    Processing: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+                    Shipped: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+                    Delivered: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+                    Cancelled: "bg-red-500/15 text-red-400 border-red-500/30",
+                  };
+
+                  const badgeClass =
+                    statusColors[order.orderStatus] ||
+                    "bg-zinc-500/15 text-zinc-400 border-zinc-500/30";
+
+                  return (
+                    <div
+                      key={order.id}
+                      className="bg-[#121c1d]/90 border border-white/10 hover:border-white/20 rounded-3xl p-5 sm:p-6 shadow-xl transition-all space-y-4"
+                    >
+                      {/* Card Header: Order ID, Date, Status */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono font-bold text-sm sm:text-base text-[#98C4C5] bg-[#98C4C5]/10 px-3 py-1 rounded-xl border border-[#98C4C5]/20">
+                            #{order.orderId || order.id.slice(0, 8)}
+                          </span>
+                          <span
+                            className={`text-xs font-bold px-3 py-1 rounded-full border font-moresugar uppercase tracking-wider ${badgeClass}`}
+                          >
+                            {order.orderStatus}
+                          </span>
+                        </div>
+
+                        {/* Status Change Selector & Delete */}
+                        <div className="flex items-center gap-2">
+                          <label className="text-[11px] text-zinc-400 font-sans hidden sm:inline">
+                            Fulfillment:
+                          </label>
+                          <select
+                            value={order.orderStatus}
+                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
+                            disabled={updatingOrderId === order.id}
+                            className="bg-[#0d1314] border border-white/20 text-xs font-bold text-white rounded-xl px-3 py-1.5 focus:outline-none focus:border-[#98C4C5] cursor-pointer font-moresugar disabled:opacity-50"
+                          >
+                            <option value="Placed">⏳ Placed</option>
+                            <option value="Processing">📦 Processing</option>
+                            <option value="Shipped">🚚 Shipped</option>
+                            <option value="Delivered">✅ Delivered</option>
+                            <option value="Cancelled">❌ Cancelled</option>
+                          </select>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteOrder(order.id)}
+                            disabled={deletingOrderId === order.id}
+                            className="w-8 h-8 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-600 hover:text-white flex items-center justify-center transition-all disabled:opacity-50 cursor-pointer"
+                            title="Delete Order Record"
+                          >
+                            {deletingOrderId === order.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Trash2 className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Main Grid: Customer Info & Order Items */}
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        {/* Customer Info Box (5 cols) */}
+                        <div className="lg:col-span-5 bg-[#0d1314]/80 border border-white/10 rounded-2xl p-4 space-y-3 text-xs font-sans">
+                          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                            <span className="font-bold text-white uppercase tracking-wider text-[10px] text-zinc-400">
+                              Recipient Details
+                            </span>
+                            <span className="text-[#98C4C5] font-semibold text-[11px]">
+                              {order.paymentMethod === "COD" ? "Cash on Delivery" : "UPI Online"}
+                            </span>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <h5 className="font-bold text-white text-sm font-moresugar">
+                              {order.customer?.name}
+                            </h5>
+
+                            {order.customer?.phone && (
+                              <a
+                                href={`tel:${order.customer.phone}`}
+                                className="text-zinc-300 hover:text-[#98C4C5] flex items-center gap-1.5 transition-colors"
+                              >
+                                <Phone className="w-3.5 h-3.5 text-[#98C4C5]" />
+                                <span>{order.customer.phone}</span>
+                              </a>
+                            )}
+
+                            {order.customer?.email && (
+                              <p className="text-zinc-400 flex items-center gap-1.5 truncate">
+                                <Mail className="w-3.5 h-3.5 text-zinc-500" />
+                                <span>{order.customer.email}</span>
+                              </p>
+                            )}
+
+                            {order.customer?.address && (
+                              <div className="pt-2 border-t border-white/5 flex items-start gap-1.5 text-zinc-300">
+                                <MapPin className="w-3.5 h-3.5 text-[#98C4C5] shrink-0 mt-0.5" />
+                                <p className="leading-relaxed">
+                                  {order.customer.address.street}, {order.customer.address.city},{" "}
+                                  {order.customer.address.state} —{" "}
+                                  <span className="font-bold text-white font-mono">
+                                    {order.customer.address.pincode}
+                                  </span>
+                                </p>
+                              </div>
+                            )}
+
+                            {order.customer?.notes && (
+                              <div className="pt-2 text-zinc-400 text-[11px] italic bg-white/5 p-2 rounded-lg">
+                                💬 Note: {order.customer.notes}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Items Breakdown (7 cols) */}
+                        <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
+                          <div className="space-y-2.5">
+                            <span className="font-bold uppercase tracking-wider text-[10px] text-zinc-400 block">
+                              Ordered Items ({order.items?.length || 0})
+                            </span>
+
+                            <div className="space-y-2 max-h-48 overflow-y-auto pr-1 no-scrollbar">
+                              {order.items?.map((item, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center gap-3 p-2 rounded-xl bg-[#0d1314]/60 border border-white/5"
+                                >
+                                  <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-zinc-900 border border-white/10 shrink-0">
+                                    {item.image ? (
+                                      <Image
+                                        src={item.image}
+                                        alt={item.title}
+                                        fill
+                                        sizes="40px"
+                                        className="object-cover"
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center text-sm">
+                                        🌸
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-semibold text-xs text-white truncate font-moresugar">
+                                      {item.title}
+                                    </p>
+                                    <p className="text-[10px] text-zinc-400">
+                                      Qty: {item.quantity} × ₹{Number(item.price || 0).toLocaleString("en-IN")}
+                                    </p>
+                                  </div>
+
+                                  <span className="font-bold text-xs text-[#98C4C5] font-moresugar">
+                                    ₹{(Number(item.price || 0) * item.quantity).toLocaleString("en-IN")}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Footer / Total summary */}
+                          <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <div className="text-xs text-zinc-400 space-x-2">
+                              <span>Shipping: {order.pricing?.shippingFee === 0 ? "FREE" : `₹${order.pricing?.shippingFee}`}</span>
+                              {order.pricing?.freeGiftUnlocked && (
+                                <span className="text-pink-400 font-bold font-moresugar">🌸 Free Stickers</span>
+                              )}
+                            </div>
+
+                            <div className="flex items-baseline gap-1.5">
+                              <span className="text-xs text-zinc-400">Total:</span>
+                              <span className="font-moresugar font-bold text-lg sm:text-xl text-[#98C4C5]">
+                                ₹{(order.pricing?.grandTotal || order.pricing?.subtotal || 0).toLocaleString("en-IN")}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Tab 5: Customers Placeholder */}
+        {/* Tab 5: Customers Overview */}
         {activeTab === "customers" && (
-          <div className="bg-[#121c1d]/90 border border-white/10 rounded-3xl p-12 text-center">
-            <Users className="w-12 h-12 text-[#98C4C5] mx-auto mb-3" />
-            <h3 className="text-xl font-bold text-white font-moresugar">Customer Management</h3>
-            <p className="text-sm text-zinc-400 mt-1 max-w-md mx-auto">
-              Registered user profiles and contact logs will appear here.
-            </p>
+          <div className="bg-[#121c1d]/90 border border-white/10 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <h3 className="text-lg sm:text-xl font-bold text-white font-moresugar flex items-center gap-2">
+                  <Users className="w-5 h-5 text-[#98C4C5]" />
+                  Registered Customers & Buyers
+                </h3>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Directory of customer profiles and verified delivery addresses.
+                </p>
+              </div>
+            </div>
+
+            {orders.length === 0 ? (
+              <div className="py-12 text-center text-zinc-400">
+                <Users className="w-10 h-10 text-zinc-600 mx-auto mb-2" />
+                <p className="font-moresugar text-sm">No customers registered or orders logged yet.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array.from(
+                  new Map(
+                    orders
+                      .filter((o) => o.customer?.phone || o.customer?.name)
+                      .map((o) => [o.customer.phone || o.customer.name, o])
+                  ).values()
+                ).map((order, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 rounded-2xl bg-[#0d1314] border border-white/10 space-y-2.5 text-xs font-sans hover:border-[#98C4C5]/30 transition-all"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-[#98C4C5]/20 text-[#98C4C5] font-bold font-moresugar flex items-center justify-center text-sm shrink-0">
+                        {(order.customer.name || "C")[0].toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-white text-sm font-moresugar truncate">
+                          {order.customer.name}
+                        </h4>
+                        <p className="text-[11px] text-zinc-400 truncate">{order.customer.phone}</p>
+                      </div>
+                    </div>
+
+                    {order.customer.address && (
+                      <p className="text-zinc-400 text-[11px] pt-1 border-t border-white/5 leading-relaxed">
+                        📍 {order.customer.address.city}, {order.customer.address.state} (
+                        {order.customer.address.pincode})
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </main>
