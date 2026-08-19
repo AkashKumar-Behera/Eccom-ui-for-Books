@@ -7,6 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useCart } from "@/context/CartContext";
 import {
   Sparkles,
   ShoppingBag,
@@ -39,6 +40,7 @@ export default function ProductDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { addToCart } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -285,6 +287,7 @@ export default function ProductDetailPage({
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <button
                     type="button"
+                    onClick={() => product && addToCart(product, quantity)}
                     disabled={isOutOfStock}
                     className="flex-1 flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] font-bold text-base font-moresugar hover:opacity-90 active:scale-98 transition-all shadow-md disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   >
@@ -294,6 +297,7 @@ export default function ProductDetailPage({
 
                   <button
                     type="button"
+                    onClick={() => product && addToCart(product, quantity)}
                     disabled={isOutOfStock}
                     className="flex-1 flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[var(--text-brand)] text-white font-bold text-base font-moresugar hover:opacity-90 active:scale-98 transition-all shadow-md disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   >

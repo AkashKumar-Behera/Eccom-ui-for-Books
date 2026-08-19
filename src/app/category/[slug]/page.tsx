@@ -7,6 +7,7 @@ import { collection, query, where, onSnapshot, getDocs } from "firebase/firestor
 import { db } from "@/lib/firebase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useCart } from "@/context/CartContext";
 import {
   Sparkles,
   ShoppingBag,
@@ -114,6 +115,7 @@ export default function CategoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
+  const { addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<"featured" | "price-low" | "price-high">("featured");
@@ -309,13 +311,24 @@ export default function CategoryPage({
                         </span>
                       </div>
 
-                      <Link
-                        href={`/product/${product.id}`}
-                        className="w-9 h-9 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xs"
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Link>
+                      <div className="flex items-center gap-1.5">
+                        <Link
+                          href={`/product/${product.id}`}
+                          className="w-8 h-8 rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center hover:bg-[var(--border-color)] transition-all"
+                          title="View Details"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => addToCart(product, 1)}
+                          disabled={isOutOfStock}
+                          className="w-8 h-8 rounded-full bg-[var(--btn-shop)] text-[var(--btn-shop-text)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xs disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+                          title="Add to Bag"
+                        >
+                          <ShoppingBag className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

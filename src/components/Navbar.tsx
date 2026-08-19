@@ -6,6 +6,7 @@ import { Search, User, ShoppingCart, Menu, ChevronDown, X } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 export const SHOP_CATEGORIES = [
   {
@@ -48,6 +49,7 @@ export const SHOP_CATEGORIES = [
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { openCart, totalItems } = useCart();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -214,16 +216,19 @@ export default function Navbar() {
               </button>
             )}
 
-            <Link
-              href="/shop"
-              className="p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors relative"
+            <button
+              type="button"
+              onClick={openCart}
+              className="p-2 rounded-full hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors relative cursor-pointer"
               aria-label="Shopping Cart"
             >
               <ShoppingCart className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 bg-[var(--text-brand)] text-[var(--bg-primary)] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans">
-                0
-              </span>
-            </Link>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[var(--text-brand)] text-[var(--bg-primary)] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-sans animate-in zoom-in-50 duration-200">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </header>
